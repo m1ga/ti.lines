@@ -15,4 +15,4 @@ name: ti.lines
 moduleid: ti.lines
 guid: c8d39832-6043-4fdd-a6d1-fce8b9f759e4
 platform: android
-minsdk: 11.1.1.GA
+minsdk: 9.0.0
