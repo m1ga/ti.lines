@@ -110,10 +110,6 @@ public class LineProxy extends TiViewProxy {
     @Kroll.setProperty
     private void setValues(Object[] obj) {
         points = obj;
-        if (view != null) {
-            //view.setPoints(points);
-        }
-
     }
 
     @Kroll.setProperty

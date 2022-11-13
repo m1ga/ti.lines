@@ -23,9 +23,11 @@ import java.util.HashMap;
 class LineView extends TiUIView {
 
     public PaintView tiPaintView;
+
     public PointF[] points;
     public PointF[] pointsCon1;
     public PointF[] pointsCon2;
+
     public int startAt = 0;
     Path pathArray = new Path();
     Path pathFillArray = new Path();
@@ -101,7 +103,7 @@ class LineView extends TiUIView {
             startPosition = dim2.getAsPixels(getOuterView());
         }
 
-
+        // draw below line - setup shader
         if (fillSpace) {
             pathHeight = (viewHeight / maxValue) * localMax + 10;
             paintBackground.setStyle(Paint.Style.FILL);
@@ -119,6 +121,7 @@ class LineView extends TiUIView {
         // set points
         for (Object point : pointObject) {
             if (point instanceof Number) {
+                // just value - draw a graph
                 Float hPoint = TiConvert.toFloat(point);
 
                 if (yScale) {
@@ -127,6 +130,7 @@ class LineView extends TiUIView {
                 points[pos].set(baseX, -hPoint + startPosition);
                 baseX += stepX;
             } else {
+                // normal lines with coordinates
                 HashMap pointValues = (HashMap) point;
                 TiDimension d1 = new TiDimension(TiConvert.toString(pointValues.get("x")), TiDimension.TYPE_WIDTH);
                 TiDimension d2 = new TiDimension(TiConvert.toString(pointValues.get("y")), TiDimension.TYPE_HEIGHT);
@@ -201,7 +205,6 @@ class LineView extends TiUIView {
     }
 
     public void clear() {
-
         points = new PointF[0];
         pointsCon1 = new PointF[0];
         pointsCon2 = new PointF[0];
