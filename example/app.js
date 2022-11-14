@@ -86,6 +86,16 @@ outerView.add(Ti.UI.createLabel({
 		fontSize: 14
 	}
 }));
+outerView.add(Ti.UI.createLabel({
+	bottom: 15,
+	right: 14,
+	color: "#000",
+	text: "click to change",
+	font: {
+		fontWeight:"bold",
+		fontSize: 12
+	}
+}));
 
 win.add(outerView);
 win.add(lines.createLine({
@@ -173,13 +183,7 @@ win.addEventListener("open", function() {
 	straightLines.redraw()
 })
 
-var clear = false;
 lineView.addEventListener("click", function() {
-	if (!clear) {
-		lineView.clear();
-	} else {
-		lineView.values = [1, 1, 4, 2, 5, 3, 2, 1, 1, 2, 4]
-		lineView.redraw()
-	}
-	clear = !clear;
+	lineView.values = lineView.values.map(() => Math.floor(Math.random() * 8));
+	lineView.redraw()
 })

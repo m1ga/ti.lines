@@ -182,6 +182,7 @@ public class LineProxy extends TiViewProxy {
     @Kroll.method
     private void redraw() {
         if (view != null) {
+            view.clear();
             view.setPoints(points);
         }
     }

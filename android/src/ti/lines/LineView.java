@@ -13,6 +13,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Shader;
 import android.view.View;
 
+import org.appcelerator.kroll.common.Log;
 import org.appcelerator.titanium.TiDimension;
 import org.appcelerator.titanium.proxy.TiViewProxy;
 import org.appcelerator.titanium.util.TiConvert;
@@ -107,10 +108,10 @@ class LineView extends TiUIView {
         if (fillSpace) {
             pathHeight = (viewHeight / maxValue) * localMax + 10;
             paintBackground.setStyle(Paint.Style.FILL);
-            paintBackground.setShader(new LinearGradient(0, 0, 0, pathHeight, new int[]{
+            paintBackground.setShader(new LinearGradient(0, viewHeight - pathHeight, 0, viewHeight, new int[]{
                     Color.parseColor("#FF8310"),
                     Color.argb(0, 253, 200, 48)
-            }, null, Shader.TileMode.REPEAT));
+            }, null, Shader.TileMode.CLAMP));
         }
 
         int stepX = (viewWidth / (points.length - 1));
@@ -214,7 +215,7 @@ class LineView extends TiUIView {
         pathAxis = new Path();
         pathYLines = new Path();
 
-        tiPaintView.clear();
+        //tiPaintView.clear();
     }
 
     public class PaintView extends View {
