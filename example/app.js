@@ -131,7 +131,7 @@ win.add(lines.createLine({
 	top: 290,
 	right: 4,
 	backgroundColor: "#c23ba2",
-	lineWidth: 4,
+	lineWidth: 10,
 	lineColor: "#fff",
 	width: 190,
 	height: 250,

@@ -23,21 +23,21 @@ import org.appcelerator.titanium.view.TiUIView;
 public class LineProxy extends TiViewProxy {
     static final int MSG_POINTS = KrollProxy.MSG_LAST_ID + 101;
     private static final String LCAT = "LineProxy";
-    LineView view;
-    Object[] points;
-    int lineColor = Color.BLACK;
-    int lineWidth = 1;
-    int startAt = 0;
-    int maxValue = -1;
-    int strokeType = TiLinesModule.STROKE_NORMAL;
-    int xLines = 0;
-    int yLines = 0;
-    int fillColorTop = Color.WHITE;
-    int fillColorBottom = Color.WHITE;
-    int lineType = TiLinesModule.TYPE_CURVED;
-    boolean showXAxis = false;
-    boolean showYAxis = false;
-    boolean fillSpace = false;
+    private LineView view;
+    private Object[] points;
+    private int lineColor = Color.BLACK;
+    private int lineWidth = 1;
+    private int startAt = 0;
+    private int maxValue = -1;
+    private int strokeType = TiLinesModule.STROKE_NORMAL;
+    private int xLines = 0;
+    private int yLines = 0;
+    private int fillColorTop = Color.WHITE;
+    private int fillColorBottom = Color.WHITE;
+    private int lineType = TiLinesModule.TYPE_CURVED;
+    private boolean showXAxis = false;
+    private boolean showYAxis = false;
+    private boolean fillSpace = false;
 
     // Constructor
     public LineProxy() {
@@ -114,10 +114,10 @@ public class LineProxy extends TiViewProxy {
             strokeType = TiConvert.toInt(options.get("strokeType"));
         }
         if (options.containsKey("fillColorTop")) {
-            fillColorTop = TiConvert.toColor(options.getString("fillColorTop"));
+            fillColorTop = TiConvert.toColor(options.getString("fillColorTop"), TiApplication.getAppCurrentActivity());
         }
         if (options.containsKey("fillColorBottom")) {
-            fillColorBottom = TiConvert.toColor(options.getString("fillColorBottom"));
+            fillColorBottom = TiConvert.toColor(options.getString("fillColorBottom"), TiApplication.getAppCurrentActivity());
         }
         updateView();
     }
@@ -153,13 +153,13 @@ public class LineProxy extends TiViewProxy {
 
     @Kroll.setProperty
     private void fillColorTop(String obj) {
-        fillColorTop = TiConvert.toColor(obj);
+        fillColorTop = TiConvert.toColor(obj, TiApplication.getAppCurrentActivity());
         if (view != null) view.fillColorTop = fillColorTop;
     }
 
     @Kroll.setProperty
     private void setFillColorBottom(String obj) {
-        fillColorTop = TiConvert.toColor(obj);
+        fillColorTop = TiConvert.toColor(obj, TiApplication.getAppCurrentActivity());
         if (view != null) view.fillColorBottom = fillColorBottom;
     }
 
