@@ -52,7 +52,10 @@ Full example is available <a href="./example/app.js"/>here</a>.
 | yLines | int | Draws dotted y-axis lines. This value will be the steps (e.g. 1 will draw every x value, 2 will draw every 2nd value,...) |
 | xLines | int | Draws dotted x-axis lines. This value will be the steps (e.g. 1 will draw every y value, 2 will draw every 2nd value,...)|
 | lineType | int | TYPE_CURVED or TYPE_STRAIGHT. Will either draw a normal line or a bezier curve |
+| strokeType | int | STROKE_NORMAL or STROKE_NORMAL. Different stroke style |
 | fillSpace | boolean | Will fill the area below the curve (experimental, no color values can be changed!) |
+| fillColorTop | Color | Color at the top |
+| fillColorBottom | Color | Color at the bottom |
 
 If you change properties after the view is visible you will need to call `redraw()` to see the changes.
 
@@ -62,6 +65,8 @@ If you change properties after the view is visible you will need to call `redraw
 * **TYPE_STRAIGHT**: normal line
 * **START_CENTER**: start in the center
 * **START_BOTTOM**: start at the bottom
+* **STROKE_NORMAL**: normal line
+* **STROKE_DASHED**: dashed line
 
 ## License
 

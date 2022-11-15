@@ -29,8 +29,11 @@ public class LineProxy extends TiViewProxy {
     int lineWidth = 1;
     int startAt = 0;
     int maxValue = -1;
+    int strokeType = TiLinesModule.STROKE_NORMAL;
     int xLines = 0;
     int yLines = 0;
+    int fillColorTop = Color.WHITE;
+    int fillColorBottom = Color.WHITE;
     int lineType = TiLinesModule.TYPE_CURVED;
     boolean showXAxis = false;
     boolean showYAxis = false;
@@ -62,6 +65,9 @@ public class LineProxy extends TiViewProxy {
             view.fillSpace = fillSpace;
             view.xLines = xLines;
             view.lineType = lineType;
+            view.strokeType = strokeType;
+            view.fillColorTop = fillColorTop;
+            view.fillColorBottom = fillColorBottom;
             if (points != null) {
                 view.setPoints(points);
             }
@@ -104,6 +110,15 @@ public class LineProxy extends TiViewProxy {
         if (options.containsKey("lineType")) {
             lineType = TiConvert.toInt(options.get("lineType"));
         }
+        if (options.containsKey("strokeType")) {
+            strokeType = TiConvert.toInt(options.get("strokeType"));
+        }
+        if (options.containsKey("fillColorTop")) {
+            fillColorTop = TiConvert.toColor(options.getString("fillColorTop"));
+        }
+        if (options.containsKey("fillColorBottom")) {
+            fillColorBottom = TiConvert.toColor(options.getString("fillColorBottom"));
+        }
         updateView();
     }
 
@@ -119,6 +134,12 @@ public class LineProxy extends TiViewProxy {
     }
 
     @Kroll.setProperty
+    private void setStrokeType(int value) {
+        strokeType = TiConvert.toInt(value);
+        if (view != null) view.strokeType = strokeType;
+    }
+
+    @Kroll.setProperty
     private void setLineWidth(Object obj) {
         lineWidth = TiConvert.toInt(obj);
         if (view != null) view.setLineWidth(lineWidth);
@@ -128,6 +149,18 @@ public class LineProxy extends TiViewProxy {
     private void setFillSpace(Object obj) {
         fillSpace = TiConvert.toBoolean(obj, false);
         if (view != null) view.fillSpace = fillSpace;
+    }
+
+    @Kroll.setProperty
+    private void fillColorTop(String obj) {
+        fillColorTop = TiConvert.toColor(obj);
+        if (view != null) view.fillColorTop = fillColorTop;
+    }
+
+    @Kroll.setProperty
+    private void setFillColorBottom(String obj) {
+        fillColorTop = TiConvert.toColor(obj);
+        if (view != null) view.fillColorBottom = fillColorBottom;
     }
 
     @Kroll.setProperty

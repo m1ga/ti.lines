@@ -27,6 +27,11 @@ public class TiLinesModule extends KrollModule {
     @Kroll.constant
     public static int TYPE_STRAIGHT = 1;
 
+    @Kroll.constant
+    public static int STROKE_NORMAL = 0;
+    @Kroll.constant
+    public static int STROKE_DASHED = 1;
+
     public TiLinesModule() {
         super();
     }

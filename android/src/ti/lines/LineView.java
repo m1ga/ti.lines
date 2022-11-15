@@ -40,6 +40,8 @@ class LineView extends TiUIView {
     int maxValue = -1;
     int yLines = 0;
     int xLines = 0;
+    int fillColorTop = Color.WHITE;
+    int fillColorBottom = Color.WHITE;
     boolean showXAis = false;
     boolean showYAis = false;
     Paint paintLine = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -50,6 +52,7 @@ class LineView extends TiUIView {
     boolean fillSpace = false;
     TiDimension dim2;
     int pathHeight = 0;
+    int strokeType = TiLinesModule.STROKE_NORMAL;
     int lineType = TiLinesModule.TYPE_CURVED;
 
     public LineView(TiViewProxy proxy) {
@@ -109,8 +112,8 @@ class LineView extends TiUIView {
             pathHeight = (viewHeight / maxValue) * localMax + 10;
             paintBackground.setStyle(Paint.Style.FILL);
             paintBackground.setShader(new LinearGradient(0, viewHeight - pathHeight, 0, viewHeight, new int[]{
-                    Color.parseColor("#FF8310"),
-                    Color.argb(0, 253, 200, 48)
+                    fillColorTop,
+                    fillColorBottom
             }, null, Shader.TileMode.CLAMP));
         }
 
@@ -162,6 +165,12 @@ class LineView extends TiUIView {
             }
         }
         pathFillArray.lineTo(viewWidth, viewHeight);
+
+        if (strokeType == TiLinesModule.STROKE_NORMAL) {
+
+        } else if (strokeType == TiLinesModule.STROKE_DASHED) {
+            paintLine.setPathEffect(new DashPathEffect(new float[]{5, 10}, 0));
+        }
 
         // create axis
         drawAxis(showXAis, showYAis);
@@ -229,8 +238,8 @@ class LineView extends TiUIView {
             paintAxis.setColor(Color.WHITE);
             setLayerType(View.LAYER_TYPE_HARDWARE, paintAxis);
 
-            paintLine.setStyle(Paint.Style.STROKE);
             paintLine.setStrokeWidth(5);
+            paintLine.setStyle(Paint.Style.STROKE);
             setLayerType(View.LAYER_TYPE_HARDWARE, paintLine);
 
             paintYLines.setStyle(Paint.Style.STROKE);

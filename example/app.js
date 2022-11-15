@@ -17,7 +17,9 @@ const lineView = lines.createLine({
 	xLines: 2,
 	values: [2, 2, 5, 1, 3, 1, 3, 2, 3, 1, 1],
 	startAt: lines.START_BOTTOM,
-	fillSpace: true
+	fillSpace: true,
+	fillColorTop: "#FF8310",
+	fillColorBottom: "rgba(253, 200, 48,0)"
 });
 
 const outerView = Ti.UI.createView({
@@ -92,7 +94,7 @@ outerView.add(Ti.UI.createLabel({
 	color: "#000",
 	text: "click to change",
 	font: {
-		fontWeight:"bold",
+		fontWeight: "bold",
 		fontSize: 12
 	}
 }));
@@ -122,6 +124,7 @@ const straightLines = lines.createLine({
 	height: 250,
 	elevation: 40,
 	borderRadius: 10,
+	strokeType: lines.STROKE_DASHED
 })
 win.add(straightLines);
 win.add(lines.createLine({
