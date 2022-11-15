@@ -53,7 +53,7 @@ Full example is available <a href="./example/app.js"/>here</a>.
 | xLines | int | Draws dotted x-axis lines. This value will be the steps (e.g. 1 will draw every y value, 2 will draw every 2nd value,...)|
 | lineType | int | TYPE_CURVED or TYPE_STRAIGHT. Will either draw a normal line or a bezier curve |
 | strokeType | int | STROKE_NORMAL or STROKE_NORMAL. Different stroke style |
-| fillSpace | boolean | Will fill the area below the curve (experimental, no color values can be changed!) |
+| fillSpace | boolean | Will fill the area below the curve (experimental) |
 | fillColorTop | Color | Color at the top |
 | fillColorBottom | Color | Color at the bottom |
 
