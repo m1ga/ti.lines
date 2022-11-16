@@ -52,8 +52,6 @@ public class LineProxy extends TiViewProxy {
     @Override
     public TiUIView createView(Activity activity) {
         view = new LineView(this);
-        view.getLayoutParams().autoFillsHeight = true;
-        view.getLayoutParams().autoFillsWidth = true;
         updateView();
         return view;
     }
@@ -68,7 +66,7 @@ public class LineProxy extends TiViewProxy {
             view.setLineColor(lineColor);
             view.setLineWidth(lineWidth);
             view.startAt = startAt;
-            view.maxValue = maxValue;
+            view.origMaxValue = maxValue;
             view.showXAis = showXAxis;
             view.showYAis = showYAxis;
             view.yLines = yLines;

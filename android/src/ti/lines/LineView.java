@@ -22,18 +22,15 @@ import org.appcelerator.titanium.view.TiUIView;
 import java.util.HashMap;
 
 class LineView extends TiUIView {
-
-    private int viewHeight;
     private final Paint paintLine = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint paintBackground = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint paintAxis = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint paintYLines = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private TiDimension dimensionHeight;
     public PaintView tiPaintView;
     public int startAt = 0;
-    public int viewWidth;
-    public int startPosition;
-    public int maxValue = -1;
+    public double startPosition;
+    public float maxValue = -1;
+    public float origMaxValue = -1;
     public int yLines = 0;
     public int xLines = 0;
     public int fillColorTop = Color.WHITE;
@@ -44,6 +41,16 @@ class LineView extends TiUIView {
     public boolean fillSpace = false;
     public int strokeType = TiLinesModule.STROKE_NORMAL;
     public int lineType = TiLinesModule.TYPE_CURVED;
+    public int paddingLeft = 0;
+    public int paddingRight = 0;
+    public int paddingTop = 0;
+    public int paddingBottom = 0;
+    private Object[] pointsArray;
+    private final TiDimension dimensionHeight;
+    private int originalViewHeight;
+    private int originalViewWidth;
+    private int viewHeight;
+    private int viewWidth;
     private PointF[] points;
     private PointF[] pointsCon1;
     private PointF[] pointsCon2;
@@ -51,15 +58,17 @@ class LineView extends TiUIView {
     private Path pathFillArray = new Path();
     private Path pathAxis = new Path();
     private Path pathXYLines = new Path();
-    private int pathHeight = 0;
-    public int paddingLeft = 0;
-    public int paddingRight = 0;
-    public int paddingTop = 0;
-    public int paddingBottom = 0;
+    private float pathHeight = 0;
 
     public LineView(TiViewProxy proxy) {
         super(proxy);
         tiPaintView = new PaintView(proxy.getActivity());
+        TiDimension dimensionWidth = new TiDimension(TiConvert.toString(proxy.getWidth()), TiDimension.TYPE_WIDTH);
+        originalViewWidth = dimensionWidth.getAsPixels(getOuterView());
+        dimensionHeight = new TiDimension(TiConvert.toString(proxy.getHeight()), TiDimension.TYPE_HEIGHT);
+        originalViewHeight = dimensionHeight.getAsPixels(getOuterView());
+        startPosition = (dimensionHeight.getAsPixels(getOuterView()) * 0.5);
+
         setNativeView(tiPaintView);
     }
 
@@ -72,17 +81,16 @@ class LineView extends TiUIView {
     }
 
     public void setPoints(Object[] pointObject) {
-        TiDimension dimensionWidth = new TiDimension(TiConvert.toString(proxy.getWidth()), TiDimension.TYPE_WIDTH);
-        dimensionHeight = new TiDimension(TiConvert.toString(proxy.getHeight()), TiDimension.TYPE_HEIGHT);
-        viewWidth = dimensionWidth.getAsPixels(getOuterView()) - paddingLeft - paddingRight;
-        viewHeight = dimensionHeight.getAsPixels(getOuterView()) - paddingTop - paddingBottom;
-        startPosition = (int) (dimensionHeight.getAsPixels(getOuterView()) * 0.5);
-
+        clear();
+        maxValue = origMaxValue;
+        viewWidth = originalViewWidth - paddingLeft - paddingRight;
+        viewHeight = originalViewHeight - paddingTop - paddingBottom;
+        pointsArray = pointObject;
         points = new PointF[pointObject.length];
         pointsCon1 = new PointF[pointObject.length];
         pointsCon2 = new PointF[pointObject.length];
 
-        int localMax = 0;
+        float localMax = 0;
 
         for (int i = 0; i < points.length; i++) {
             points[i] = new PointF();
@@ -104,7 +112,7 @@ class LineView extends TiUIView {
         }
 
         if (startAt == TiLinesModule.START_CENTER) {
-            startPosition = (int) (dimensionHeight.getAsPixels(getOuterView()) * 0.5);
+            startPosition = dimensionHeight.getAsPixels(getOuterView()) * 0.5;
             localMax /= 0.5;
             maxValue /= 0.5;
         } else if (startAt == TiLinesModule.START_BOTTOM) {
@@ -122,7 +130,8 @@ class LineView extends TiUIView {
         }
 
         float stepX = (viewWidth / (points.length - 1));
-        int baseX = paddingLeft;
+
+        float baseX = paddingLeft;
         int pos = 0;
         pathFillArray.moveTo(paddingLeft, viewHeight + paddingBottom);
 
@@ -135,7 +144,7 @@ class LineView extends TiUIView {
                 if (yScale) {
                     hPoint = (viewHeight / maxValue) * hPoint;
                 }
-                points[pos].set(baseX, -hPoint + startPosition - paddingBottom);
+                points[pos].set(baseX, (float) (-hPoint + startPosition - paddingBottom));
                 baseX += stepX;
             } else {
                 // normal lines with coordinates
@@ -149,7 +158,6 @@ class LineView extends TiUIView {
             }
             pos++;
         }
-
         // set bezier points
         for (int i = 1; i < points.length; i++) {
             pointsCon1[i].set((points[i].x + points[i - 1].x) / 2, points[i - 1].y);
@@ -192,12 +200,12 @@ class LineView extends TiUIView {
 
         if (yLines > 0) {
             // dashed horizontal lines
-            int steps = (viewHeight / yLines);
+            float steps = (viewHeight / yLines);
             if (yScale) {
                 steps = (viewHeight / maxValue) * yLines;
             }
 
-            int yPos = viewHeight - steps + paddingBottom;
+            float yPos = viewHeight - steps + paddingBottom;
 
             while (yPos > paddingTop) {
                 pathXYLines.moveTo(paddingLeft, yPos);
@@ -209,7 +217,7 @@ class LineView extends TiUIView {
         if (xLines > 0) {
             //  dashed vertical lines
             float steps = (viewWidth / (points.length - 1)) * xLines;
-            int xPos = paddingLeft;
+            float xPos = paddingLeft;
             while (xPos <= viewWidth) {
                 pathXYLines.moveTo(xPos, paddingTop);
                 pathXYLines.lineTo(xPos, viewHeight + paddingBottom);
@@ -259,6 +267,11 @@ class LineView extends TiUIView {
         @Override
         protected void onSizeChanged(int w, int h, int oldw, int oldh) {
             super.onSizeChanged(w, h, oldw, oldh);
+
+            if ((originalViewWidth == 0 && (proxy.getWidth().equals("fill") || proxy.getWidth().equals("size"))) || originalViewWidth != w) {
+                originalViewWidth = w;
+                setPoints(pointsArray);
+            }
         }
 
 
