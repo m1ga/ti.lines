@@ -61,6 +61,7 @@ Full example is available <a href="./example/app.js"/>here</a>.
 | fillSpace | boolean | Will fill the area below the curve (experimental) |
 | fillColorTop | Color | Color at the top |
 | fillColorBottom | Color | Color at the bottom |
+| padding | int/array | Either one int value for all sides or 4 values: [top, right, bottom, left] as an array |
 
 If you change properties after the view is visible you will need to call `redraw()` to see the changes.
 
