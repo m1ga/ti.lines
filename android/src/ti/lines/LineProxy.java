@@ -14,6 +14,7 @@ import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.KrollProxy;
 import org.appcelerator.kroll.annotations.Kroll;
 import org.appcelerator.titanium.TiApplication;
+import org.appcelerator.titanium.TiDimension;
 import org.appcelerator.titanium.proxy.TiViewProxy;
 import org.appcelerator.titanium.util.TiConvert;
 import org.appcelerator.titanium.view.TiUIView;
@@ -32,6 +33,10 @@ public class LineProxy extends TiViewProxy {
     private int strokeType = TiLinesModule.STROKE_NORMAL;
     private int xLines = 0;
     private int yLines = 0;
+    private int paddingLeft = 0;
+    private int paddingRight = 0;
+    private int paddingTop = 0;
+    private int paddingBottom = 0;
     private int fillColorTop = Color.WHITE;
     private int fillColorBottom = Color.WHITE;
     private int lineType = TiLinesModule.TYPE_CURVED;
@@ -55,6 +60,11 @@ public class LineProxy extends TiViewProxy {
 
     private void updateView() {
         if (view != null) {
+
+            view.paddingLeft = new TiDimension(TiConvert.toString(paddingLeft), TiDimension.TYPE_WIDTH).getAsPixels(view.tiPaintView);
+            view.paddingRight = new TiDimension(TiConvert.toString(paddingRight), TiDimension.TYPE_WIDTH).getAsPixels(view.tiPaintView);
+            view.paddingTop = new TiDimension(TiConvert.toString(paddingTop), TiDimension.TYPE_WIDTH).getAsPixels(view.tiPaintView);
+            view.paddingBottom = new TiDimension(TiConvert.toString(paddingBottom), TiDimension.TYPE_WIDTH).getAsPixels(view.tiPaintView);
             view.setLineColor(lineColor);
             view.setLineWidth(lineWidth);
             view.startAt = startAt;
@@ -68,6 +78,7 @@ public class LineProxy extends TiViewProxy {
             view.strokeType = strokeType;
             view.fillColorTop = fillColorTop;
             view.fillColorBottom = fillColorBottom;
+
             if (points != null) {
                 view.setPoints(points);
             }
@@ -112,6 +123,22 @@ public class LineProxy extends TiViewProxy {
         }
         if (options.containsKey("strokeType")) {
             strokeType = TiConvert.toInt(options.get("strokeType"));
+        }
+        if (options.containsKey("padding")) {
+            if (options.get("padding") instanceof Integer) {
+                paddingTop = options.getInt("padding");
+                paddingRight = options.getInt("padding");
+                paddingBottom = options.getInt("padding");
+                paddingLeft = options.getInt("padding");
+            } else {
+                Object[] padding = (Object[]) options.get("padding");
+                if (padding.length == 4) {
+                    paddingTop = TiConvert.toInt(padding[0]);
+                    paddingRight = TiConvert.toInt(padding[1]);
+                    paddingBottom = TiConvert.toInt(padding[2]);
+                    paddingLeft = TiConvert.toInt(padding[3]);
+                }
+            }
         }
         if (options.containsKey("fillColorTop")) {
             fillColorTop = TiConvert.toColor(options.getString("fillColorTop"), TiApplication.getAppCurrentActivity());
@@ -203,6 +230,27 @@ public class LineProxy extends TiViewProxy {
     private void setStartAt(Object obj) {
         startAt = TiConvert.toInt(obj);
         if (view != null) view.startAt = startAt;
+    }
+
+    @Kroll.setProperty
+    private void setPaddingTop(Object obj) {
+        paddingTop = TiConvert.toInt(obj);
+        if (view != null) view.paddingTop = paddingTop;
+    }
+
+    @Kroll.setProperty
+    private void setPadding(Object obj) {
+        if (obj instanceof Integer) {
+            paddingLeft = paddingBottom = paddingRight = paddingTop = TiConvert.toInt(obj);
+        } else {
+            Object[] padding = (Object[]) obj;
+            if (padding.length == 4) {
+                paddingTop = TiConvert.toInt(padding[0]);
+                paddingRight = TiConvert.toInt(padding[1]);
+                paddingBottom = TiConvert.toInt(padding[2]);
+                paddingLeft = TiConvert.toInt(padding[3]);
+            }
+        }
     }
 
     @Kroll.method

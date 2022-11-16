@@ -13,6 +13,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Shader;
 import android.view.View;
 
+import org.appcelerator.kroll.common.Log;
 import org.appcelerator.titanium.TiDimension;
 import org.appcelerator.titanium.proxy.TiViewProxy;
 import org.appcelerator.titanium.util.TiConvert;
@@ -22,6 +23,12 @@ import java.util.HashMap;
 
 class LineView extends TiUIView {
 
+    private int viewHeight;
+    private final Paint paintLine = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint paintBackground = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint paintAxis = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint paintYLines = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private TiDimension dimensionHeight;
     public PaintView tiPaintView;
     public int startAt = 0;
     public int viewWidth;
@@ -44,22 +51,16 @@ class LineView extends TiUIView {
     private Path pathFillArray = new Path();
     private Path pathAxis = new Path();
     private Path pathXYLines = new Path();
-    private final int viewHeight;
-    private final Paint paintLine = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private final Paint paintBackground = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private final Paint paintAxis = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private final Paint paintYLines = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private final TiDimension dimensionHeight;
     private int pathHeight = 0;
+    public int paddingLeft = 0;
+    public int paddingRight = 0;
+    public int paddingTop = 0;
+    public int paddingBottom = 0;
 
     public LineView(TiViewProxy proxy) {
         super(proxy);
-        TiDimension dimensionWidth = new TiDimension(TiConvert.toString(proxy.getWidth()), TiDimension.TYPE_WIDTH);
-        dimensionHeight = new TiDimension(TiConvert.toString(proxy.getHeight()), TiDimension.TYPE_HEIGHT);
-        viewWidth = dimensionWidth.getAsPixels(getOuterView());
-        viewHeight = dimensionHeight.getAsPixels(getOuterView());
-        startPosition = (int) (dimensionHeight.getAsPixels(getOuterView()) * 0.5);
-        setNativeView(tiPaintView = new PaintView(proxy.getActivity()));
+        tiPaintView = new PaintView(proxy.getActivity());
+        setNativeView(tiPaintView);
     }
 
     public void setLineColor(int color) {
@@ -71,6 +72,12 @@ class LineView extends TiUIView {
     }
 
     public void setPoints(Object[] pointObject) {
+        TiDimension dimensionWidth = new TiDimension(TiConvert.toString(proxy.getWidth()), TiDimension.TYPE_WIDTH);
+        dimensionHeight = new TiDimension(TiConvert.toString(proxy.getHeight()), TiDimension.TYPE_HEIGHT);
+        viewWidth = dimensionWidth.getAsPixels(getOuterView()) - paddingLeft - paddingRight;
+        viewHeight = dimensionHeight.getAsPixels(getOuterView()) - paddingTop - paddingBottom;
+        startPosition = (int) (dimensionHeight.getAsPixels(getOuterView()) * 0.5);
+
         points = new PointF[pointObject.length];
         pointsCon1 = new PointF[pointObject.length];
         pointsCon2 = new PointF[pointObject.length];
@@ -108,16 +115,16 @@ class LineView extends TiUIView {
         if (fillSpace) {
             pathHeight = (viewHeight / maxValue) * localMax + 10;
             paintBackground.setStyle(Paint.Style.FILL);
-            paintBackground.setShader(new LinearGradient(0, viewHeight - pathHeight, 0, viewHeight, new int[]{
+            paintBackground.setShader(new LinearGradient(0, viewHeight - pathHeight + paddingTop, 0, viewHeight + paddingTop, new int[]{
                     fillColorTop,
                     fillColorBottom
             }, null, Shader.TileMode.CLAMP));
         }
 
-        int stepX = (viewWidth / (points.length - 1));
-        int baseX = 0;
+        float stepX = (viewWidth / (points.length - 1));
+        int baseX = paddingLeft;
         int pos = 0;
-        pathFillArray.moveTo(0, viewHeight);
+        pathFillArray.moveTo(paddingLeft, viewHeight + paddingBottom);
 
         // set points
         for (Object point : pointObject) {
@@ -128,7 +135,7 @@ class LineView extends TiUIView {
                 if (yScale) {
                     hPoint = (viewHeight / maxValue) * hPoint;
                 }
-                points[pos].set(baseX, -hPoint + startPosition);
+                points[pos].set(baseX, -hPoint + startPosition - paddingBottom);
                 baseX += stepX;
             } else {
                 // normal lines with coordinates
@@ -161,7 +168,7 @@ class LineView extends TiUIView {
                 pathFillArray.lineTo(points[i].x, points[i].y);
             }
         }
-        pathFillArray.lineTo(viewWidth, viewHeight);
+        pathFillArray.lineTo(viewWidth + paddingLeft, viewHeight + paddingTop);
 
         // stroke type
         if (strokeType == TiLinesModule.STROKE_DASHED) {
@@ -175,38 +182,41 @@ class LineView extends TiUIView {
 
     private void drawAxis(boolean drawX, boolean drawY) {
         if (drawX) {
-            pathAxis.moveTo(0, viewHeight);
-            pathAxis.lineTo(viewWidth, viewHeight);
+            pathAxis.moveTo(paddingLeft, viewHeight + paddingTop);
+            pathAxis.lineTo(viewWidth + paddingLeft, viewHeight + paddingTop);
         }
         if (drawY) {
-            pathAxis.moveTo(0, viewHeight);
-            pathAxis.lineTo(0, 0);
+            pathAxis.moveTo(paddingLeft, viewHeight + paddingBottom);
+            pathAxis.lineTo(paddingLeft, paddingTop);
         }
 
         if (yLines > 0) {
+            // dashed horizontal lines
             int steps = (viewHeight / yLines);
             if (yScale) {
                 steps = (viewHeight / maxValue) * yLines;
             }
 
-            int yPos = viewHeight - steps;
+            int yPos = viewHeight - steps + paddingBottom;
 
-            while (yPos > 0) {
-                pathXYLines.moveTo(0, yPos);
-                pathXYLines.lineTo(viewWidth, yPos);
+            while (yPos > paddingTop) {
+                pathXYLines.moveTo(paddingLeft, yPos);
+                pathXYLines.lineTo(viewWidth + paddingLeft, yPos);
                 yPos -= steps;
             }
         }
 
         if (xLines > 0) {
-            int steps = (viewWidth / (points.length - 1)) * xLines;
-            int xPos = viewWidth;
-
-            while (xPos > 0) {
-                pathXYLines.moveTo(xPos, 0);
-                pathXYLines.lineTo(xPos, viewHeight);
-                xPos -= steps;
+            //  dashed vertical lines
+            float steps = (viewWidth / (points.length - 1)) * xLines;
+            int xPos = paddingLeft;
+            while (xPos <= viewWidth) {
+                pathXYLines.moveTo(xPos, paddingTop);
+                pathXYLines.lineTo(xPos, viewHeight + paddingBottom);
+                xPos += steps;
             }
+            pathXYLines.moveTo(xPos, paddingTop);
+            pathXYLines.lineTo(xPos, viewHeight + paddingBottom);
         }
     }
 
@@ -243,6 +253,7 @@ class LineView extends TiUIView {
             setLayerType(View.LAYER_TYPE_HARDWARE, paintYLines);
 
             setLayerType(View.LAYER_TYPE_HARDWARE, paintBackground);
+
         }
 
         @Override

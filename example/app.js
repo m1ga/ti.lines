@@ -6,8 +6,8 @@ win.open();
 const lines = require('ti.lines');
 
 const lineView = lines.createLine({
-	width: 180,
-	height: 230,
+	width: 190,
+	height: 250,
 	lineWidth: 4,
 	lineColor: "#fff",
 	xAxis: true,
@@ -19,7 +19,8 @@ const lineView = lines.createLine({
 	startAt: lines.START_BOTTOM,
 	fillSpace: true,
 	fillColorTop: "#FF8310",
-	fillColorBottom: "rgba(253, 200, 48,0)"
+	fillColorBottom: "rgba(253, 200, 48,0)",
+	padding: 10
 });
 
 const outerView = Ti.UI.createView({
@@ -111,6 +112,8 @@ win.add(lines.createLine({
 	xAxis: false,
 	yAxis: false,
 	maxValue: 10,
+	padding: [10, 20, 10, 20],
+	startAt: lines.START_BOTTOM,
 	elevation: 40,
 	borderRadius: 10,
 	values: [0, 2, 5, 1, 3, 1, 3, 2, 3, 1, 1]

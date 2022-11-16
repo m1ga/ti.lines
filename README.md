@@ -30,6 +30,11 @@ const lineView = lines.createLine({
 });
 ```
 
+Alloy:
+```xml
+<Line module="ti.lines" lineColor="#7541fd" fillSpace="true" fillColorTop="rgba(45,25,99,0.5)" fillColorBottom="rgba(0,0,0,0)"/>
+```
+
 Full example is available <a href="./example/app.js"/>here</a>.
 
 
