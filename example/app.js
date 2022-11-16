@@ -161,6 +161,39 @@ win.add(lines.createLine({
 	}]
 }));
 
+win.add(lines.createLine({
+	top: 550,
+	backgroundColor: "#c23ba2",
+	lineWidth: 10,
+	lineColor: "#fff",
+	width: Ti.UI.FILL,
+	height: 50,
+	elevation: 40,
+	borderRadius: 10,
+	maxValue: 10,
+	values: Array(8).fill().map(() => 10 * Math.random())
+}));
+
+const aniLines = lines.createLine({
+	top: 610,
+	backgroundColor: "#c23ba2",
+	lineWidth: 10,
+	lineColor: "#fff",
+	width: 100,
+	height: 50,
+	elevation: 40,
+	borderRadius: 10,
+	maxValue: 10,
+	values: Array(8).fill().map(() => 10 * Math.random())
+})
+win.add(aniLines);
+var ani = Ti.UI.createAnimation({
+	width: 200,
+	duration: 2000,
+	autoreverse: true,
+	repeat: 3
+});
+aniLines.animate(ani);
 
 
 win.addEventListener("open", function() {
@@ -190,6 +223,6 @@ win.addEventListener("open", function() {
 })
 
 lineView.addEventListener("click", function() {
-	lineView.values = lineView.values.map(() => Math.floor(Math.random() * 8));
+	lineView.values = Array(8).fill().map(() => 10 * Math.random());
 	lineView.redraw()
 })
