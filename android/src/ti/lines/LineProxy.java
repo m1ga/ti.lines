@@ -28,6 +28,7 @@ public class LineProxy extends TiViewProxy {
     private Object[] points;
     private int lineColor = Color.BLACK;
     private int lineWidth = 1;
+    private int axisWidth = 1;
     private int startAt = 0;
     private int maxValue = -1;
     private int strokeType = TiLinesModule.STROKE_NORMAL;
@@ -39,6 +40,7 @@ public class LineProxy extends TiViewProxy {
     private int paddingBottom = 0;
     private int fillColorTop = Color.WHITE;
     private int fillColorBottom = Color.WHITE;
+    private int axisColor = Color.WHITE;
     private int lineType = TiLinesModule.TYPE_CURVED;
     private boolean showXAxis = false;
     private boolean showYAxis = false;
@@ -70,8 +72,10 @@ public class LineProxy extends TiViewProxy {
             view.showXAis = showXAxis;
             view.showYAis = showYAxis;
             view.yLines = yLines;
+            view.axisWidth = axisWidth;
             view.fillSpace = fillSpace;
             view.xLines = xLines;
+            view.axisColor = axisColor;
             view.lineType = lineType;
             view.strokeType = strokeType;
             view.fillColorTop = fillColorTop;
@@ -113,6 +117,9 @@ public class LineProxy extends TiViewProxy {
         if (options.containsKey("xLines")) {
             xLines = TiConvert.toInt(options.get("xLines"));
         }
+        if (options.containsKey("axisWidth")) {
+            axisWidth = TiConvert.toInt(options.get("axisWidth"));
+        }
         if (options.containsKey("fillSpace")) {
             fillSpace = TiConvert.toBoolean(options.get("fillSpace"), false);
         }
@@ -141,6 +148,9 @@ public class LineProxy extends TiViewProxy {
         if (options.containsKey("fillColorTop")) {
             fillColorTop = TiConvert.toColor(options.getString("fillColorTop"), TiApplication.getAppCurrentActivity());
         }
+        if (options.containsKey("axisColor")) {
+            axisColor = TiConvert.toColor(options.getString("axisColor"), TiApplication.getAppCurrentActivity());
+        }
         if (options.containsKey("fillColorBottom")) {
             fillColorBottom = TiConvert.toColor(options.getString("fillColorBottom"), TiApplication.getAppCurrentActivity());
         }
@@ -157,11 +167,21 @@ public class LineProxy extends TiViewProxy {
         lineColor = TiConvert.toColor(obj, TiApplication.getAppCurrentActivity());
         if (view != null) view.setLineColor(lineColor);
     }
+    @Kroll.setProperty
+    private void setAxisColor(Object obj) {
+        axisColor = TiConvert.toColor(obj, TiApplication.getAppCurrentActivity());
+        if (view != null) view.axisColor = axisColor;
+    }
 
     @Kroll.setProperty
     private void setStrokeType(int value) {
         strokeType = TiConvert.toInt(value);
         if (view != null) view.strokeType = strokeType;
+    }
+    @Kroll.setProperty
+    private void setAxisWidth(int value) {
+        axisWidth = TiConvert.toInt(value);
+        if (view != null) view.axisWidth = axisWidth;
     }
 
     @Kroll.setProperty

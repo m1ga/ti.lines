@@ -8,7 +8,7 @@ const lines = require('ti.lines');
 const lineView = lines.createLine({
 	width: 190,
 	height: 250,
-	lineWidth: 4,
+	lineWidth: 1,
 	lineColor: "#fff",
 	xAxis: true,
 	yAxis: true,
@@ -134,7 +134,7 @@ win.add(lines.createLine({
 	top: 290,
 	right: 4,
 	backgroundColor: "#c23ba2",
-	lineWidth: 10,
+	lineWidth: 2,
 	lineColor: "#fff",
 	width: 190,
 	height: 250,
@@ -164,20 +164,27 @@ win.add(lines.createLine({
 win.add(lines.createLine({
 	top: 550,
 	backgroundColor: "#c23ba2",
-	lineWidth: 10,
+	lineWidth: 4,
 	lineColor: "#fff",
-	width: Ti.UI.FILL,
+	left: 10,
+	right: 10,
 	height: 50,
 	elevation: 40,
 	borderRadius: 10,
 	maxValue: 10,
-	values: Array(8).fill().map(() => 10 * Math.random())
+	xAxis: true,
+	yAxis: true,
+	xLines: 2,
+	yLines: 6,
+	axisColor: "#000",
+	axisWidth: 2,
+	values: Array(8).fill().map(() => 10 * Math.random() - 5)
 }));
 
 const aniLines = lines.createLine({
 	top: 610,
 	backgroundColor: "#c23ba2",
-	lineWidth: 10,
+	lineWidth: 2,
 	lineColor: "#fff",
 	width: 100,
 	height: 50,
@@ -191,7 +198,7 @@ var ani = Ti.UI.createAnimation({
 	width: 200,
 	duration: 2000,
 	autoreverse: true,
-	repeat: 3
+	repeat: 1
 });
 aniLines.animate(ani);
 

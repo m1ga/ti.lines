@@ -50,6 +50,8 @@ Full example is available <a href="./example/app.js"/>here</a>.
 | values | Array/Object | Can be a simple array `[2, 2, 5...]` to draw a graph or `[{x: 0, y: 0}, { x: 50, y: 200},...]` to draw lines |
 | lineColor | Color | Color of the line |
 | lineWidth | int | Width of the line |
+| axisWidth | int | Width of the x/y axis |
+| axisColor | Color | Color of the x/y axis |
 | startAt | int | START_CENTER or START_BOTTOM. Will set the 0 point in the y-axis center or bottom |
 | maxValue | int | Sets a custom max value for the y-axis and remaps your input values. Otherwise the view height will be the maxValue |
 | xAxis | boolean | Show the x-axis |
