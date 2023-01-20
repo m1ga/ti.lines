@@ -49,6 +49,8 @@ Full example is available <a href="./example/app.js"/>here</a>.
 |---|---|---|
 | values | Array/Object | Can be a simple array `[2, 2, 5...]` to draw a graph or `[{x: 0, y: 0}, { x: 50, y: 200},...]` to draw lines |
 | lineColor | Color | Color of the line |
+| lineColorFrom | Color | Line color gradient - start color  |
+| lineColorTo | Color | Line color gradient - end color |
 | lineWidth | int | Width of the line |
 | axisWidth | int | Width of the x/y axis |
 | axisColor | Color | Color of the x/y axis |

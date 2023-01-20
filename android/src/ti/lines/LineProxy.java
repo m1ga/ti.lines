@@ -24,6 +24,8 @@ import org.appcelerator.titanium.view.TiUIView;
 public class LineProxy extends TiViewProxy {
     static final int MSG_POINTS = KrollProxy.MSG_LAST_ID + 101;
     private static final String LCAT = "LineProxy";
+    public int pathColorFrom = Color.WHITE;
+    public int pathColorTo = Color.WHITE;
     private LineView view;
     private Object[] points;
     private int lineColor = Color.BLACK;
@@ -65,7 +67,16 @@ public class LineProxy extends TiViewProxy {
             view.paddingRight = new TiDimension(TiConvert.toString(paddingRight), TiDimension.TYPE_WIDTH).getAsPixels(view.tiPaintView);
             view.paddingTop = new TiDimension(TiConvert.toString(paddingTop), TiDimension.TYPE_WIDTH).getAsPixels(view.tiPaintView);
             view.paddingBottom = new TiDimension(TiConvert.toString(paddingBottom), TiDimension.TYPE_WIDTH).getAsPixels(view.tiPaintView);
-            view.setLineColor(lineColor);
+
+            if (pathColorFrom!=Color.WHITE && pathColorTo != Color.WHITE) {
+                view.pathColorFrom = pathColorFrom;
+                view.pathColorTo = pathColorTo;
+
+            } else {
+                view.setLineColor(lineColor);
+            }
+
+
             view.setLineWidth(lineWidth);
             view.startAt = startAt;
             view.origMaxValue = maxValue;
@@ -95,6 +106,12 @@ public class LineProxy extends TiViewProxy {
         }
         if (options.containsKey("lineColor")) {
             lineColor = TiConvert.toColor(options.getString("lineColor"), TiApplication.getAppCurrentActivity());
+        }
+        if (options.containsKey("lineColorFrom")) {
+            pathColorFrom = TiConvert.toColor(options.getString("lineColorFrom"), TiApplication.getAppCurrentActivity());
+        }
+        if (options.containsKey("lineColorTo")) {
+            pathColorTo = TiConvert.toColor(options.getString("lineColorTo"), TiApplication.getAppCurrentActivity());
         }
         if (options.containsKey("lineWidth")) {
             lineWidth = TiConvert.toInt(options.get("lineWidth"));
@@ -167,6 +184,19 @@ public class LineProxy extends TiViewProxy {
         lineColor = TiConvert.toColor(obj, TiApplication.getAppCurrentActivity());
         if (view != null) view.setLineColor(lineColor);
     }
+
+    @Kroll.setProperty
+    private void setLineColorFrom(Object obj) {
+        pathColorFrom = TiConvert.toColor(obj, TiApplication.getAppCurrentActivity());
+        if (view != null) view.pathColorFrom = pathColorFrom;
+    }
+
+    @Kroll.setProperty
+    private void setLineColorTo(Object obj) {
+        pathColorTo = TiConvert.toColor(obj, TiApplication.getAppCurrentActivity());
+        if (view != null) view.pathColorTo = pathColorTo;
+    }
+
     @Kroll.setProperty
     private void setAxisColor(Object obj) {
         axisColor = TiConvert.toColor(obj, TiApplication.getAppCurrentActivity());
@@ -178,6 +208,7 @@ public class LineProxy extends TiViewProxy {
         strokeType = TiConvert.toInt(value);
         if (view != null) view.strokeType = strokeType;
     }
+
     @Kroll.setProperty
     private void setAxisWidth(int value) {
         axisWidth = TiConvert.toInt(value);

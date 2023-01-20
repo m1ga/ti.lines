@@ -13,6 +13,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Shader;
 import android.view.View;
 
+import org.appcelerator.kroll.common.Log;
 import org.appcelerator.titanium.TiDimension;
 import org.appcelerator.titanium.proxy.TiViewProxy;
 import org.appcelerator.titanium.util.TiConvert;
@@ -60,6 +61,8 @@ class LineView extends TiUIView {
     private Path pathAxis = new Path();
     private Path pathXYLines = new Path();
     private float pathHeight = 0;
+    public int pathColorFrom = Color.WHITE;
+    public int pathColorTo = Color.WHITE;
 
     public LineView(TiViewProxy proxy) {
         super(proxy);
@@ -191,6 +194,11 @@ class LineView extends TiUIView {
             paintLine.setPathEffect(new DashPathEffect(new float[]{5, 10}, 0));
         }
 
+        if (pathColorFrom != Color.WHITE && pathColorTo != Color.WHITE) {
+            paintLine.setColor(Color.WHITE);
+            paintLine.setShader(new LinearGradient(0, 0, viewWidth, 0, pathColorFrom, pathColorTo, Shader.TileMode.CLAMP));
+        }
+
         // create axis
         drawAxis(showXAis, showYAis);
         tiPaintView.invalidate();
@@ -281,7 +289,6 @@ class LineView extends TiUIView {
             setLayerType(View.LAYER_TYPE_HARDWARE, paintYLines);
 
             setLayerType(View.LAYER_TYPE_HARDWARE, paintBackground);
-
         }
 
         @Override
