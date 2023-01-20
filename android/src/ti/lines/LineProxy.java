@@ -47,6 +47,7 @@ public class LineProxy extends TiViewProxy {
     private boolean showXAxis = false;
     private boolean showYAxis = false;
     private boolean fillSpace = false;
+    private boolean lineGradient = false;
 
     // Constructor
     public LineProxy() {
@@ -68,10 +69,10 @@ public class LineProxy extends TiViewProxy {
             view.paddingTop = new TiDimension(TiConvert.toString(paddingTop), TiDimension.TYPE_WIDTH).getAsPixels(view.tiPaintView);
             view.paddingBottom = new TiDimension(TiConvert.toString(paddingBottom), TiDimension.TYPE_WIDTH).getAsPixels(view.tiPaintView);
 
-            if (pathColorFrom!=Color.WHITE && pathColorTo != Color.WHITE) {
+            if (lineGradient) {
+                view.lineGradient = lineGradient;
                 view.pathColorFrom = pathColorFrom;
                 view.pathColorTo = pathColorTo;
-
             } else {
                 view.setLineColor(lineColor);
             }
@@ -109,9 +110,11 @@ public class LineProxy extends TiViewProxy {
         }
         if (options.containsKey("lineColorFrom")) {
             pathColorFrom = TiConvert.toColor(options.getString("lineColorFrom"), TiApplication.getAppCurrentActivity());
+            lineGradient = true;
         }
         if (options.containsKey("lineColorTo")) {
             pathColorTo = TiConvert.toColor(options.getString("lineColorTo"), TiApplication.getAppCurrentActivity());
+            lineGradient = true;
         }
         if (options.containsKey("lineWidth")) {
             lineWidth = TiConvert.toInt(options.get("lineWidth"));

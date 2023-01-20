@@ -63,6 +63,7 @@ class LineView extends TiUIView {
     private float pathHeight = 0;
     public int pathColorFrom = Color.WHITE;
     public int pathColorTo = Color.WHITE;
+    public boolean lineGradient = false;
 
     public LineView(TiViewProxy proxy) {
         super(proxy);
@@ -194,7 +195,7 @@ class LineView extends TiUIView {
             paintLine.setPathEffect(new DashPathEffect(new float[]{5, 10}, 0));
         }
 
-        if (pathColorFrom != Color.WHITE && pathColorTo != Color.WHITE) {
+        if (lineGradient) {
             paintLine.setColor(Color.WHITE);
             paintLine.setShader(new LinearGradient(0, 0, viewWidth, 0, pathColorFrom, pathColorTo, Shader.TileMode.CLAMP));
         }
