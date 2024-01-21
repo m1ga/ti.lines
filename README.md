@@ -78,6 +78,10 @@ If you change properties after the view is visible you will need to call `redraw
 * **STROKE_NORMAL**: normal line
 * **STROKE_DASHED**: dashed line
 
+## iOS version
+
+The iOS version is currently very limited and can only draw straight lines and you can use: `maxValue`, `values`, `lineColor`, `lineWidth`.
+
 ## License
 
 MIT
