@@ -80,7 +80,13 @@ If you change properties after the view is visible you will need to call `redraw
 
 ## iOS version
 
-The iOS version is currently very limited and can only draw straight lines and you can use: `maxValue`, `values`, `lineColor`, `lineWidth`.
+The iOS version is currently very limited. You can use:
+* values
+* maxValue
+* lineColor
+* lineWidth
+* lineType
+* startAt
 
 ## License
 
