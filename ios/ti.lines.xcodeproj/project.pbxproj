@@ -22,13 +22,13 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		15A008742B5D3BD300B017B8 /* TiLinesLineProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 15A008732B5D3BD300B017B8 /* TiLinesLineProxy.m */; };
 		15A008772B5D3C8600B017B8 /* TiLinesLine.h in Headers */ = {isa = PBXBuildFile; fileRef = 15A008752B5D3C8600B017B8 /* TiLinesLine.h */; };
-		15A008782B5D3C8600B017B8 /* TiLinesLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 15A008762B5D3C8600B017B8 /* TiLinesLine.m */; };
+		15B285A72B5D6B290030AA25 /* TiLinesLineProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = 15B285A42B5D6B290030AA25 /* TiLinesLineProxy.h */; };
+		15B285A82B5D6B290030AA25 /* TiLinesLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 15B285A52B5D6B290030AA25 /* TiLinesLine.m */; };
+		15B285A92B5D6B290030AA25 /* TiLinesLineProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 15B285A62B5D6B290030AA25 /* TiLinesLineProxy.m */; };
+		15B285AB2B5D6B320030AA25 /* UIBezierPath+Smoothing.m in Sources */ = {isa = PBXBuildFile; fileRef = 15B285AA2B5D6B320030AA25 /* UIBezierPath+Smoothing.m */; };
 		24DD6CF91134B3F500162E58 /* TiLinesModule.h in Headers */ = {isa = PBXBuildFile; fileRef = 24DD6CF71134B3F500162E58 /* TiLinesModule.h */; };
 		24DD6CFA1134B3F500162E58 /* TiLinesModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DD6CF81134B3F500162E58 /* TiLinesModule.m */; };
-		24DE9E1111C5FE74003F90F6 /* TiLinesModuleAssets.h in Headers */ = {isa = PBXBuildFile; fileRef = 24DE9E0F11C5FE74003F90F6 /* TiLinesModuleAssets.h */; };
-		24DE9E1211C5FE74003F90F6 /* TiLinesModuleAssets.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DE9E1011C5FE74003F90F6 /* TiLinesModuleAssets.m */; };
 		AA747D9F0F9514B9006C5449 /* TiLines_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = AA747D9E0F9514B9006C5449 /* TiLines_Prefix.pch */; };
 		AACBBE4A0F95108600F1A2B1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AACBBE490F95108600F1A2B1 /* Foundation.framework */; };
 		B11E042C241AC5C100EFA7DC /* TitaniumKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B11E042B241AC5C100EFA7DC /* TitaniumKit.xcframework */; };
@@ -45,15 +45,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		15A008722B5D3BB900B017B8 /* TiLinesLineProxy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TiLinesLineProxy.h; sourceTree = "<group>"; };
-		15A008732B5D3BD300B017B8 /* TiLinesLineProxy.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TiLinesLineProxy.m; sourceTree = "<group>"; };
-		15A008752B5D3C8600B017B8 /* TiLinesLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TiLinesLine.h; sourceTree = "<group>"; };
-		15A008762B5D3C8600B017B8 /* TiLinesLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TiLinesLine.m; sourceTree = "<group>"; };
+		15A008752B5D3C8600B017B8 /* TiLinesLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TiLinesLine.h; path = Classes/TiLinesLine.h; sourceTree = "<group>"; };
+		15B285A42B5D6B290030AA25 /* TiLinesLineProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TiLinesLineProxy.h; path = Classes/TiLinesLineProxy.h; sourceTree = "<group>"; };
+		15B285A52B5D6B290030AA25 /* TiLinesLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TiLinesLine.m; path = Classes/TiLinesLine.m; sourceTree = "<group>"; };
+		15B285A62B5D6B290030AA25 /* TiLinesLineProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TiLinesLineProxy.m; path = Classes/TiLinesLineProxy.m; sourceTree = "<group>"; };
+		15B285AA2B5D6B320030AA25 /* UIBezierPath+Smoothing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIBezierPath+Smoothing.m"; path = "Classes/UIBezierPath+Smoothing.m"; sourceTree = "<group>"; };
 		24DD6CF71134B3F500162E58 /* TiLinesModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TiLinesModule.h; path = Classes/TiLinesModule.h; sourceTree = "<group>"; };
 		24DD6CF81134B3F500162E58 /* TiLinesModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TiLinesModule.m; path = Classes/TiLinesModule.m; sourceTree = "<group>"; };
 		24DD6D1B1134B66800162E58 /* titanium.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = titanium.xcconfig; sourceTree = "<group>"; };
-		24DE9E0F11C5FE74003F90F6 /* TiLinesModuleAssets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TiLinesModuleAssets.h; path = Classes/TiLinesModuleAssets.h; sourceTree = "<group>"; };
-		24DE9E1011C5FE74003F90F6 /* TiLinesModuleAssets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TiLinesModuleAssets.m; path = Classes/TiLinesModuleAssets.m; sourceTree = "<group>"; };
 		AA747D9E0F9514B9006C5449 /* TiLines_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TiLines_Prefix.pch; sourceTree = SOURCE_ROOT; };
 		AACBBE490F95108600F1A2B1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		B11E042B241AC5C100EFA7DC /* TitaniumKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = TitaniumKit.xcframework; path = "$(TITANIUM_SDK)/iphone/Frameworks/TitaniumKit.xcframework"; sourceTree = "<group>"; };
@@ -104,14 +103,13 @@
 		08FB77AEFE84172EC02AAC07 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				15B285AA2B5D6B320030AA25 /* UIBezierPath+Smoothing.m */,
+				15B285A52B5D6B290030AA25 /* TiLinesLine.m */,
+				15B285A42B5D6B290030AA25 /* TiLinesLineProxy.h */,
+				15B285A62B5D6B290030AA25 /* TiLinesLineProxy.m */,
 				15A008752B5D3C8600B017B8 /* TiLinesLine.h */,
-				15A008762B5D3C8600B017B8 /* TiLinesLine.m */,
-				24DE9E0F11C5FE74003F90F6 /* TiLinesModuleAssets.h */,
-				24DE9E1011C5FE74003F90F6 /* TiLinesModuleAssets.m */,
 				24DD6CF71134B3F500162E58 /* TiLinesModule.h */,
 				24DD6CF81134B3F500162E58 /* TiLinesModule.m */,
-				15A008722B5D3BB900B017B8 /* TiLinesLineProxy.h */,
-				15A008732B5D3BD300B017B8 /* TiLinesLineProxy.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -134,8 +132,8 @@
 			files = (
 				AA747D9F0F9514B9006C5449 /* TiLines_Prefix.pch in Headers */,
 				24DD6CF91134B3F500162E58 /* TiLinesModule.h in Headers */,
+				15B285A72B5D6B290030AA25 /* TiLinesLineProxy.h in Headers */,
 				15A008772B5D3C8600B017B8 /* TiLinesLine.h in Headers */,
-				24DE9E1111C5FE74003F90F6 /* TiLinesModuleAssets.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -208,10 +206,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				15B285A82B5D6B290030AA25 /* TiLinesLine.m in Sources */,
 				24DD6CFA1134B3F500162E58 /* TiLinesModule.m in Sources */,
-				24DE9E1211C5FE74003F90F6 /* TiLinesModuleAssets.m in Sources */,
-				15A008742B5D3BD300B017B8 /* TiLinesLineProxy.m in Sources */,
-				15A008782B5D3C8600B017B8 /* TiLinesLine.m in Sources */,
+				15B285AB2B5D6B320030AA25 /* UIBezierPath+Smoothing.m in Sources */,
+				15B285A92B5D6B290030AA25 /* TiLinesLineProxy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
