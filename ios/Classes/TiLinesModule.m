@@ -30,32 +30,15 @@
 
 - (void)startup
 {
-  // This method is called when the module is first loaded
-  // You *must* call the superclass
   [super startup];
-  DebugLog(@"[DEBUG] %@ loaded", self);
 }
+
+MAKE_SYSTEM_PROP(START_CENTER, 0);
+MAKE_SYSTEM_PROP(START_BOTTOM, 1);
+
+MAKE_SYSTEM_PROP(TYPE_CURVED, 0);
+MAKE_SYSTEM_PROP(TYPE_STRAIGHT, 1);
 
 #pragma Public APIs
-
-- (NSString *)example:(id)args
-{
-  // Example method. 
-  // Call with "MyModule.example(args)"
-  return @"hello world";
-}
-
-- (NSString *)exampleProp
-{
-  // Example property getter. 
-  // Call with "MyModule.exampleProp" or "MyModule.getExampleProp()"
-  return @"Titanium rocks!";
-}
-
-- (void)setExampleProp:(id)value
-{
-  // Example property setter. 
-  // Call with "MyModule.exampleProp = 'newValue'" or "MyModule.setExampleProp('newValue')"
-}
 
 @end

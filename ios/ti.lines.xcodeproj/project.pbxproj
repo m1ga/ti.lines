@@ -27,6 +27,7 @@
 		15B285A82B5D6B290030AA25 /* TiLinesLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 15B285A52B5D6B290030AA25 /* TiLinesLine.m */; };
 		15B285A92B5D6B290030AA25 /* TiLinesLineProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 15B285A62B5D6B290030AA25 /* TiLinesLineProxy.m */; };
 		15B285AB2B5D6B320030AA25 /* UIBezierPath+Smoothing.m in Sources */ = {isa = PBXBuildFile; fileRef = 15B285AA2B5D6B320030AA25 /* UIBezierPath+Smoothing.m */; };
+		15B285AE2B5D72CF0030AA25 /* UIBezierPath+Smoothing.h in Headers */ = {isa = PBXBuildFile; fileRef = 15B285AD2B5D72CF0030AA25 /* UIBezierPath+Smoothing.h */; };
 		24DD6CF91134B3F500162E58 /* TiLinesModule.h in Headers */ = {isa = PBXBuildFile; fileRef = 24DD6CF71134B3F500162E58 /* TiLinesModule.h */; };
 		24DD6CFA1134B3F500162E58 /* TiLinesModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DD6CF81134B3F500162E58 /* TiLinesModule.m */; };
 		AA747D9F0F9514B9006C5449 /* TiLines_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = AA747D9E0F9514B9006C5449 /* TiLines_Prefix.pch */; };
@@ -50,6 +51,7 @@
 		15B285A52B5D6B290030AA25 /* TiLinesLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TiLinesLine.m; path = Classes/TiLinesLine.m; sourceTree = "<group>"; };
 		15B285A62B5D6B290030AA25 /* TiLinesLineProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TiLinesLineProxy.m; path = Classes/TiLinesLineProxy.m; sourceTree = "<group>"; };
 		15B285AA2B5D6B320030AA25 /* UIBezierPath+Smoothing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIBezierPath+Smoothing.m"; path = "Classes/UIBezierPath+Smoothing.m"; sourceTree = "<group>"; };
+		15B285AD2B5D72CF0030AA25 /* UIBezierPath+Smoothing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIBezierPath+Smoothing.h"; path = "Classes/UIBezierPath+Smoothing.h"; sourceTree = "<group>"; };
 		24DD6CF71134B3F500162E58 /* TiLinesModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TiLinesModule.h; path = Classes/TiLinesModule.h; sourceTree = "<group>"; };
 		24DD6CF81134B3F500162E58 /* TiLinesModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TiLinesModule.m; path = Classes/TiLinesModule.m; sourceTree = "<group>"; };
 		24DD6D1B1134B66800162E58 /* titanium.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = titanium.xcconfig; sourceTree = "<group>"; };
@@ -103,6 +105,7 @@
 		08FB77AEFE84172EC02AAC07 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				15B285AD2B5D72CF0030AA25 /* UIBezierPath+Smoothing.h */,
 				15B285AA2B5D6B320030AA25 /* UIBezierPath+Smoothing.m */,
 				15B285A52B5D6B290030AA25 /* TiLinesLine.m */,
 				15B285A42B5D6B290030AA25 /* TiLinesLineProxy.h */,
@@ -134,6 +137,7 @@
 				24DD6CF91134B3F500162E58 /* TiLinesModule.h in Headers */,
 				15B285A72B5D6B290030AA25 /* TiLinesLineProxy.h in Headers */,
 				15A008772B5D3C8600B017B8 /* TiLinesLine.h in Headers */,
+				15B285AE2B5D72CF0030AA25 /* UIBezierPath+Smoothing.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

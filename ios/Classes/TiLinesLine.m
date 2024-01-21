@@ -8,6 +8,7 @@
 #import "TiLinesLine.h"
 #import "TiUtils.h"
 #import "UIKit/UIBezierPath.h"
+#import "UIBezierPath+Smoothing.h"
 
 @implementation TiLinesLine
 
@@ -30,7 +31,6 @@
     values = value;
 }
 
-
 - (void)setLineWidth_:(id) value{
     lineWidth = [TiUtils intValue:value];
 }
@@ -40,14 +40,25 @@
 - (void)setLineColor_:(id) value{
     lineColor = [TiUtils colorValue:value];
 }
+- (void)setLineType_:(id) value{
+    lineType = [TiUtils intValue:value];
+}
+- (void)setStartAt_:(id) value{
+    startAt = [TiUtils intValue:value];
+}
 -(void)drawRect:(CGRect)rect {
     UIBezierPath *bezierPath = [UIBezierPath bezierPath];
     
     CGFloat stepX = square.bounds.size.width / (values.count - 1);
     CGFloat startX = 0;
     CGFloat startPosition = square.bounds.size.height * 0.5;
-    CGFloat startY = square.bounds.size.height * 0.5;
-    maxValue /= 0.5;
+    if (startAt == 1) {
+        // start at bottom
+        startPosition = square.bounds.size.height;
+    } else {
+        // start in center
+        maxValue /= 0.5;
+    }
     
     // starting point
     CGFloat hPoint = [TiUtils intValue: values[0]];
@@ -63,7 +74,14 @@
     }
     
     CAShapeLayer *shapeLayer = [CAShapeLayer layer];
-    shapeLayer.path = [bezierPath CGPath];
+    if (lineType == 0) {
+        // smooth path
+        UIBezierPath *smoothPath = [bezierPath smoothedPathWithGranularity: 10 minY:0 maxY:100];
+        shapeLayer.path = [smoothPath CGPath];
+    } else {
+        // straight path
+        shapeLayer.path = [bezierPath CGPath];
+    }
     shapeLayer.strokeColor = [lineColor _color].CGColor;
     shapeLayer.lineWidth = lineWidth;
     shapeLayer.fillColor = [[UIColor clearColor] CGColor];

@@ -11,6 +11,7 @@
     UIView *square;
     NSInteger startAt;
     NSInteger lineWidth;
+    NSInteger lineType;
     NSInteger maxValue;
     TiColor *lineColor;
     NSArray *values;
