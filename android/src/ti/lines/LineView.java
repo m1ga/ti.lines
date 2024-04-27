@@ -11,29 +11,35 @@ import android.graphics.PointF;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Shader;
+import android.graphics.Typeface;
+import android.os.Build;
 import android.view.View;
 
-import org.appcelerator.kroll.common.Log;
 import org.appcelerator.titanium.TiDimension;
 import org.appcelerator.titanium.proxy.TiViewProxy;
 import org.appcelerator.titanium.util.TiConvert;
 import org.appcelerator.titanium.view.TiUIView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 class LineView extends TiUIView {
+    private final Paint paintDots = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint paintLine = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint paintBackground = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint paintAxis = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint paintYLines = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint paintText = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final TiDimension dimensionHeight;
     public PaintView tiPaintView;
     public int startAt = 0;
     public double startPosition;
     public float maxValue = -1;
-    public float origMaxValue = -1;
+    public float minValue = -1;
     public int yLines = 0;
     public int xLines = 0;
+    public int emptyValues = 0;
     public int axisWidth = 1;
     public int fillColorTop = Color.WHITE;
     public int fillColorBottom = Color.WHITE;
@@ -42,12 +48,22 @@ class LineView extends TiUIView {
     public boolean showYAis = false;
     public boolean yScale = false;
     public boolean fillSpace = false;
+    public boolean showDots = false;
     public int strokeType = TiLinesModule.STROKE_NORMAL;
     public int lineType = TiLinesModule.TYPE_CURVED;
     public int paddingLeft = 0;
     public int paddingRight = 0;
     public int paddingTop = 0;
     public int paddingBottom = 0;
+    public int dotSize = 10;
+    public int pathColorFrom = Color.WHITE;
+    public int pathColorTo = Color.WHITE;
+    public int yAxisTextColor = Color.WHITE;
+    public int dotColor = Color.WHITE;
+    public boolean lineGradient = false;
+    public boolean drawYAxisText = false;
+    public boolean skipYAxisTextZero = false;
+    public int yAxisTextOffestX = 0;
     private Object[] pointsArray;
     private int originalViewHeight;
     private int originalViewWidth;
@@ -61,9 +77,7 @@ class LineView extends TiUIView {
     private Path pathAxis = new Path();
     private Path pathXYLines = new Path();
     private float pathHeight = 0;
-    public int pathColorFrom = Color.WHITE;
-    public int pathColorTo = Color.WHITE;
-    public boolean lineGradient = false;
+    private final List<CustomText> textYAxis = new ArrayList<CustomText>();
 
     public LineView(TiViewProxy proxy) {
         super(proxy);
@@ -88,17 +102,18 @@ class LineView extends TiUIView {
 
     public void setPoints(Object[] pointObject) {
         clear();
-        maxValue = origMaxValue;
         viewWidth = originalViewWidth - paddingLeft - paddingRight;
         viewHeight = originalViewHeight - paddingTop - paddingBottom;
         startPosition = originalViewHeight * 0.5;
         pointsArray = pointObject;
+        if (pointObject == null) return;
         points = new PointF[pointObject.length];
         pointsCon1 = new PointF[pointObject.length];
         pointsCon2 = new PointF[pointObject.length];
 
         float localMax = 0;
 
+        if (points.length == 0) return;
         for (int i = 0; i < points.length; i++) {
             points[i] = new PointF();
             pointsCon1[i] = new PointF();
@@ -136,7 +151,8 @@ class LineView extends TiUIView {
             }, null, Shader.TileMode.CLAMP));
         }
 
-        float stepX = (viewWidth / (points.length - 1));
+        int lowerVal = (emptyValues + points.length - 1);
+        float stepX = lowerVal == 0 ? 0 : (viewWidth / lowerVal);
 
         float baseX = paddingLeft;
         int pos = 0;
@@ -147,11 +163,17 @@ class LineView extends TiUIView {
             if (point instanceof Number) {
                 // just value - draw a graph
                 float hPoint = TiConvert.toFloat(point);
+                if (minValue != -1) {
+                    hPoint -= minValue;
+                }
 
                 if (yScale) {
                     hPoint = (viewHeight / maxValue) * hPoint;
                 }
-                points[pos].set(baseX, (float) (-hPoint + startPosition - paddingBottom));
+
+                float yValue = (float) (-hPoint + startPosition - paddingBottom);
+
+                points[pos].set(baseX, yValue);
                 if (pos < pointObject.length - 1) {
                     baseX += stepX;
                 } else {
@@ -187,6 +209,7 @@ class LineView extends TiUIView {
                 pathArray.lineTo(points[i].x, points[i].y);
                 pathFillArray.lineTo(points[i].x, points[i].y);
             }
+
         }
         pathFillArray.lineTo(viewWidth + paddingLeft, viewHeight + paddingTop);
 
@@ -203,6 +226,8 @@ class LineView extends TiUIView {
         // create axis
         drawAxis(showXAis, showYAis);
         tiPaintView.invalidate();
+
+        paintDots.setColor(dotColor);
     }
 
     private void drawAxis(boolean drawX, boolean drawY) {
@@ -211,13 +236,18 @@ class LineView extends TiUIView {
         paintAxis.setColor(axisColor);
         paintAxis.setStrokeWidth(dim.getAsPixels(getOuterView()));
 
+        paintText.setColor(yAxisTextColor);
+
+        float startY = 0;
         if (drawX) {
             if (startAt == TiLinesModule.START_CENTER) {
                 pathAxis.moveTo(paddingLeft, viewHeight * 0.5f);
                 pathAxis.lineTo(viewWidth + paddingLeft, viewHeight * 0.5f);
+                startY = viewHeight * 0.5f;
             } else {
                 pathAxis.moveTo(paddingLeft, viewHeight + paddingTop);
                 pathAxis.lineTo(viewWidth + paddingLeft, viewHeight + paddingTop);
+                startY = viewHeight + paddingTop;
             }
         }
         if (drawY) {
@@ -233,10 +263,18 @@ class LineView extends TiUIView {
             }
             if (steps > 0) {
                 float yPos = viewHeight - steps + paddingBottom;
+                int startVal = 0;
                 while (yPos > paddingTop) {
+                    if (drawYAxisText) {
+                        if (!skipYAxisTextZero || startVal > 0) {
+                            textYAxis.add(new CustomText(String.valueOf(startVal), paddingLeft, startY, yAxisTextOffestX));
+                        }
+                    }
                     pathXYLines.moveTo(paddingLeft, yPos);
                     pathXYLines.lineTo(viewWidth + paddingLeft, yPos);
                     yPos -= steps;
+                    startY -= steps;
+                    startVal += yLines;
                 }
             }
         }
@@ -283,11 +321,19 @@ class LineView extends TiUIView {
             paintLine.setStyle(Paint.Style.STROKE);
             setLayerType(View.LAYER_TYPE_HARDWARE, paintLine);
 
+            paintDots.setColor(dotColor);
+            setLayerType(View.LAYER_TYPE_HARDWARE, paintDots);
+
             paintYLines.setStyle(Paint.Style.STROKE);
             paintYLines.setStrokeWidth(2);
             paintYLines.setPathEffect(new DashPathEffect(new float[]{5, 10}, 0));
             paintYLines.setColor(0x99FFFFFF);
             setLayerType(View.LAYER_TYPE_HARDWARE, paintYLines);
+
+            paintText.setTextSize(30);
+            paintText.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+            paintText.setColor(yAxisTextColor);
+            paintText.setTextAlign(Paint.Align.RIGHT);
 
             setLayerType(View.LAYER_TYPE_HARDWARE, paintBackground);
         }
@@ -323,6 +369,16 @@ class LineView extends TiUIView {
                 }
 
                 canvas.drawPath(pathArray, paintLine);
+            }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                textYAxis.forEach((textBlock) -> textBlock.draw(canvas, paintText));
+            }
+
+            if (showDots) {
+                for (int i = 1; i < points.length; i++) {
+                    canvas.drawCircle(points[i].x, points[i].y, dotSize, paintDots);
+                }
             }
         }
 

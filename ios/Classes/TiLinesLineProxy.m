@@ -9,4 +9,14 @@
 
 @implementation TiLinesLineProxy
 
+- (void)redraw:(id)args
+{
+    [(TiLinesLineProxy *)[self view] redraw:args];
+}
+
+- (void)clear:(id)args
+{
+    [(TiLinesLineProxy *)[self view] clear:args];
+}
+
 @end

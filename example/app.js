@@ -20,7 +20,13 @@ const lineView = lines.createLine({
 	fillSpace: true,
 	fillColorTop: "#FF8310",
 	fillColorBottom: "rgba(253, 200, 48,0)",
-	padding: 10
+	padding: 10,
+	yAxisText: {
+		color: "#ff0",
+		show: true,
+		hideZero: true,
+		offsetX: -5
+	}
 });
 
 const outerView = Ti.UI.createView({
@@ -166,7 +172,7 @@ win.add(lines.createLine({
 	top: 550,
 	backgroundColor: "#c23ba2",
 	lineWidth: 4,
-	lineColorFrom: "#0000FF",
+	lineColorFrom: "rgba(0,0,255,0)",
 	lineColorTo: "#ffffff",
 	left: 10,
 	right: 10,

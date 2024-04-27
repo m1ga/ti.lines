@@ -30,9 +30,12 @@ public class LineProxy extends TiViewProxy {
     private Object[] points;
     private int lineColor = Color.BLACK;
     private int lineWidth = 1;
+    private int dotSize = 10;
     private int axisWidth = 1;
+    private int emptyValues = 0;
     private int startAt = 0;
     private int maxValue = -1;
+    private int minValue = -1;
     private int strokeType = TiLinesModule.STROKE_NORMAL;
     private int xLines = 0;
     private int yLines = 0;
@@ -43,11 +46,17 @@ public class LineProxy extends TiViewProxy {
     private int fillColorTop = Color.WHITE;
     private int fillColorBottom = Color.WHITE;
     private int axisColor = Color.WHITE;
+    private int dotColor = Color.WHITE;
     private int lineType = TiLinesModule.TYPE_CURVED;
+    private int yAxisTextColor = Color.WHITE;
     private boolean showXAxis = false;
     private boolean showYAxis = false;
     private boolean fillSpace = false;
     private boolean lineGradient = false;
+    private boolean drawYAxisText = false;
+    private boolean showDots = false;
+    private boolean skipYAxisTextZero = false;
+    private int yAxisTextOffestX = 0;
 
     // Constructor
     public LineProxy() {
@@ -80,18 +89,27 @@ public class LineProxy extends TiViewProxy {
 
             view.setLineWidth(lineWidth);
             view.startAt = startAt;
-            view.origMaxValue = maxValue;
+            view.maxValue = maxValue;
+            view.minValue = minValue;
             view.showXAis = showXAxis;
             view.showYAis = showYAxis;
             view.yLines = yLines;
+            view.dotSize = dotSize;
+            view.dotColor = dotColor;
             view.axisWidth = axisWidth;
             view.fillSpace = fillSpace;
             view.xLines = xLines;
+            view.showDots = showDots;
+            view.emptyValues = emptyValues;
             view.axisColor = axisColor;
             view.lineType = lineType;
             view.strokeType = strokeType;
             view.fillColorTop = fillColorTop;
             view.fillColorBottom = fillColorBottom;
+            view.drawYAxisText = drawYAxisText;
+            view.skipYAxisTextZero = skipYAxisTextZero;
+            view.yAxisTextColor = yAxisTextColor;
+            view.yAxisTextOffestX = yAxisTextOffestX;
 
             if (points != null) {
                 view.setPoints(points);
@@ -116,6 +134,9 @@ public class LineProxy extends TiViewProxy {
             pathColorTo = TiConvert.toColor(options.getString("lineColorTo"), TiApplication.getAppCurrentActivity());
             lineGradient = true;
         }
+        if (options.containsKey("dotColor")) {
+            dotColor = TiConvert.toColor(options.getString("dotColor"), TiApplication.getAppCurrentActivity());
+        }
         if (options.containsKey("lineWidth")) {
             lineWidth = TiConvert.toInt(options.get("lineWidth"));
         }
@@ -125,11 +146,20 @@ public class LineProxy extends TiViewProxy {
         if (options.containsKey("maxValue")) {
             maxValue = TiConvert.toInt(options.get("maxValue"));
         }
+        if (options.containsKey("minValue")) {
+            minValue = TiConvert.toInt(options.get("minValue"));
+        }
+        if (options.containsKey("emptyValues")) {
+            emptyValues = TiConvert.toInt(options.get("emptyValues"), 0);
+        }
         if (options.containsKey("xAxis")) {
             showXAxis = TiConvert.toBoolean(options.get("xAxis"), false);
         }
         if (options.containsKey("yAxis")) {
             showYAxis = TiConvert.toBoolean(options.get("yAxis"), false);
+        }
+        if (options.containsKey("showDots")) {
+            showDots = TiConvert.toBoolean(options.get("showDots"), false);
         }
         if (options.containsKey("yLines")) {
             yLines = TiConvert.toInt(options.get("yLines"));
@@ -143,6 +173,22 @@ public class LineProxy extends TiViewProxy {
         if (options.containsKey("fillSpace")) {
             fillSpace = TiConvert.toBoolean(options.get("fillSpace"), false);
         }
+        if (options.containsKey("yAxisText")) {
+            KrollDict innerOptions = options.getKrollDict("yAxisText");
+            if (innerOptions.containsKey("show")) {
+                drawYAxisText = TiConvert.toBoolean(innerOptions.get("show"), false);
+            }
+            if (innerOptions.containsKey("hideZero")) {
+                skipYAxisTextZero = TiConvert.toBoolean(innerOptions.get("hideZero"), false);
+            }
+            if (innerOptions.containsKey("offsetX")) {
+                yAxisTextOffestX = TiConvert.toInt(innerOptions.get("offsetX"), 0);
+            }
+            if (innerOptions.containsKey("color")) {
+                yAxisTextColor = TiConvert.toColor(innerOptions.getString("color"));
+            }
+        }
+
         if (options.containsKey("lineType")) {
             lineType = TiConvert.toInt(options.get("lineType"));
         }
@@ -195,6 +241,12 @@ public class LineProxy extends TiViewProxy {
     }
 
     @Kroll.setProperty
+    private void setDotColor(Object obj) {
+        dotColor = TiConvert.toColor(obj, TiApplication.getAppCurrentActivity());
+        if (view != null) view.pathColorFrom = dotColor;
+    }
+
+    @Kroll.setProperty
     private void setLineColorTo(Object obj) {
         pathColorTo = TiConvert.toColor(obj, TiApplication.getAppCurrentActivity());
         if (view != null) view.pathColorTo = pathColorTo;
@@ -213,6 +265,12 @@ public class LineProxy extends TiViewProxy {
     }
 
     @Kroll.setProperty
+    private void setEmptyValues(int value) {
+        emptyValues = TiConvert.toInt(value);
+        if (view != null) view.emptyValues = emptyValues;
+    }
+
+    @Kroll.setProperty
     private void setAxisWidth(int value) {
         axisWidth = TiConvert.toInt(value);
         if (view != null) view.axisWidth = axisWidth;
@@ -228,6 +286,29 @@ public class LineProxy extends TiViewProxy {
     private void setFillSpace(Object obj) {
         fillSpace = TiConvert.toBoolean(obj, false);
         if (view != null) view.fillSpace = fillSpace;
+    }
+
+    //    @Kroll.setProperty
+//    private void setDrawYAxisText(Object obj) {
+//        drawYAxisText = TiConvert.toBoolean(obj, false);
+//        if (view != null) view.drawYAxisText = drawYAxisText;
+//    }
+//    @Kroll.setProperty
+//    private void setSkipYAxisTextZero(Object obj) {
+//        skipYAxisTextZero = TiConvert.toBoolean(obj, false);
+//        if (view != null) view.skipYAxisTextZero = skipYAxisTextZero;
+//    }
+//
+    @Kroll.setProperty
+    private void setShowDots(Object obj) {
+        showDots = TiConvert.toBoolean(obj, false);
+        if (view != null) view.showDots = showDots;
+    }
+
+    @Kroll.setProperty
+    private void setDotSize(Object obj) {
+        dotSize = TiConvert.toInt(obj);
+        if (view != null) view.setLineWidth(dotSize);
     }
 
     @Kroll.setProperty
@@ -276,6 +357,12 @@ public class LineProxy extends TiViewProxy {
     private void setMaxValue(Object obj) {
         maxValue = TiConvert.toInt(obj);
         if (view != null) view.maxValue = maxValue;
+    }
+
+    @Kroll.setProperty
+    private void setMinValue(Object obj) {
+        minValue = TiConvert.toInt(obj);
+        if (view != null) view.minValue = minValue;
     }
 
     @Kroll.setProperty

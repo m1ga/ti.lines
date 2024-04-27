@@ -59,43 +59,35 @@ NSArray *pointsFromBezierPath(UIBezierPath *bpath)
     UIBezierPath *smoothedPath = [self copy];
     [smoothedPath removeAllPoints];
     
-    [smoothedPath moveToPoint:POINT(0)];
-    
-    for (NSUInteger index = 1; index < points.count - 2; index++)
-    {
-        CGPoint p0 = POINT(index - 1);
-        CGPoint p1 = POINT(index);
-        CGPoint p2 = POINT(index + 1);
-        CGPoint p3 = POINT(index + 2);
+    // Draw out the first 3 points (0..2)
+        [smoothedPath moveToPoint:POINT(0)];
         
-        // now add n points starting at p1 + dx/dy up until p2 using Catmull-Rom splines
-        for (int i = 1; i < granularity; i++)
+        for (int index = 1; index < 3; index++)
+            [smoothedPath addLineToPoint:POINT(index)];
+        
+        for (int index = 4; index < points.count; index++)
         {
-            float t = (float) i * (1.0f / (float) granularity);
-            float tt = t * t;
-            float ttt = tt * t;
-            
-            CGPoint pi; // intermediate point
-            pi.x = 0.5 * (2*p1.x+(p2.x-p0.x)*t + (2*p0.x-5*p1.x+4*p2.x-p3.x)*tt + (3*p1.x-p0.x-3*p2.x+p3.x)*ttt);
-            pi.y = 0.5 * (2*p1.y+(p2.y-p0.y)*t + (2*p0.y-5*p1.y+4*p2.y-p3.y)*tt + (3*p1.y-p0.y-3*p2.y+p3.y)*ttt);
-            
-            if(pi.y > maxY){
+    
+        CGPoint p0 = POINT(index - 3);
+                CGPoint p1 = POINT(index - 2);
+                CGPoint p2 = POINT(index - 1);
+                CGPoint p3 = POINT(index);
                 
-                pi.y = maxY;
-            }
-            else if(pi.y < minY){
+                // now add n points starting at p1 + dx/dy up until p2 using Catmull-Rom splines
+                for (int i = 1; i < granularity; i++)
+                {
+                    float t = (float) i * (1.0f / (float) granularity);
+                    float tt = t * t;
+                    float ttt = tt * t;
+                    
+                    CGPoint pi; // intermediate point
+                    pi.x = 0.5 * (2*p1.x+(p2.x-p0.x)*t + (2*p0.x-5*p1.x+4*p2.x-p3.x)*tt + (3*p1.x-p0.x-3*p2.x+p3.x)*ttt);
+                    pi.y = 0.5 * (2*p1.y+(p2.y-p0.y)*t + (2*p0.y-5*p1.y+4*p2.y-p3.y)*tt + (3*p1.y-p0.y-3*p2.y+p3.y)*ttt);
+                    [smoothedPath addLineToPoint:pi];
+                }
                 
-                pi.y = minY;
-            }
-            
-            if(pi.x > p0.x){
-                
-                [smoothedPath addLineToPoint:pi];
-            }
-        }
-        
-        // Now add p2
-        [smoothedPath addLineToPoint:p2];
+                // Now add p2
+                [smoothedPath addLineToPoint:p2];
     }
     
     // finish by adding the last point
