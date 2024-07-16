@@ -393,6 +393,13 @@ public class LineProxy extends TiViewProxy {
     }
 
     @Kroll.method
+    private void drawCircle(KrollDict kd) {
+        if (view != null) {
+            view.drawCircle(kd);
+        }
+    }
+
+    @Kroll.method
     private void clear() {
         if (view != null) {
             view.clear();

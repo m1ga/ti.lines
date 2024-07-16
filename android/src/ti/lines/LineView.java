@@ -10,11 +10,15 @@ import android.graphics.Path;
 import android.graphics.PointF;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.view.View;
 
+import org.appcelerator.kroll.KrollDict;
+import org.appcelerator.kroll.common.Log;
+import org.appcelerator.titanium.TiApplication;
 import org.appcelerator.titanium.TiDimension;
 import org.appcelerator.titanium.proxy.TiViewProxy;
 import org.appcelerator.titanium.util.TiConvert;
@@ -31,6 +35,7 @@ class LineView extends TiUIView {
     private final Paint paintAxis = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint paintYLines = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint paintText = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final TiDimension dimensionHeight;
     public PaintView tiPaintView;
     public int startAt = 0;
@@ -77,7 +82,12 @@ class LineView extends TiUIView {
     private Path pathAxis = new Path();
     private Path pathXYLines = new Path();
     private float pathHeight = 0;
+    private int slices = 0;
+    private int circleBorderWidth = 0;
+    private String[] circleColors;
+
     private final List<CustomText> textYAxis = new ArrayList<CustomText>();
+    RectF oval = new RectF(0f, 0f, 100f,100f);
 
     public LineView(TiViewProxy proxy) {
         super(proxy);
@@ -87,7 +97,7 @@ class LineView extends TiUIView {
         dimensionHeight = new TiDimension(TiConvert.toString(proxy.getHeight()), TiDimension.TYPE_HEIGHT);
         originalViewHeight = dimensionHeight.getAsPixels(getOuterView());
         startPosition = originalViewHeight * 0.5;
-
+        oval = new RectF(0f, 0f, originalViewWidth,dimensionHeight.getAsPixels(tiPaintView));
         setNativeView(tiPaintView);
     }
 
@@ -306,6 +316,16 @@ class LineView extends TiUIView {
         pathXYLines = new Path();
     }
 
+    Boolean drawCircle = false;
+
+    public void drawCircle(KrollDict kd) {
+        if (kd.containsKeyAndNotNull("colors")) {
+            circleColors = kd.getStringArray("colors");
+            slices = circleColors.length;
+            drawCircle = true;
+        }
+    }
+
     public class PaintView extends View {
         private boolean clearAll = false;
 
@@ -378,6 +398,18 @@ class LineView extends TiUIView {
             if (showDots) {
                 for (int i = 1; i < points.length; i++) {
                     canvas.drawCircle(points[i].x, points[i].y, dotSize, paintDots);
+                }
+            }
+
+            if (drawCircle) {
+                circlePaint.setStyle(Paint.Style.FILL);
+
+                circlePaint.setColor(TiConvert.toColor(circleColors[0], TiApplication.getAppCurrentActivity()));
+                float circleAngle = (float) 360 /slices;
+
+                for (int i=0; i<slices;++i) {
+                    circlePaint.setColor(TiConvert.toColor(circleColors[i], TiApplication.getAppCurrentActivity()));
+                    canvas.drawArc(oval, circleAngle*i, circleAngle, true, circlePaint);
                 }
             }
         }
