@@ -10,7 +10,9 @@
 * put the ZIP into you project root
 * add `<module>ti.lines</module>` to your tiapp.xml `<modules>` section.
 
-## Example
+## Lines
+
+### Example
 ```js
 const lines = require('ti.lines');
 
@@ -38,12 +40,12 @@ Alloy:
 Full example is available <a href="./example/app.js"/>here</a>.
 
 
-## Methods
+### Methods
 
 * clear() - clears the view
 * redraw() - redraws the line after you change properties
 
-## Properties
+### Properties
 
 |Property|Type|Description|
 |---|---|---|
@@ -69,7 +71,7 @@ Full example is available <a href="./example/app.js"/>here</a>.
 
 If you change properties after the view is visible you will need to call `redraw()` to see the changes.
 
-## Constants
+### Constants
 
 * **TYPE_CURVED**: bezier line
 * **TYPE_STRAIGHT**: normal line
@@ -78,7 +80,7 @@ If you change properties after the view is visible you will need to call `redraw
 * **STROKE_NORMAL**: normal line
 * **STROKE_DASHED**: dashed line
 
-## iOS version
+### iOS version
 
 The iOS version is currently very limited. You can use:
 * values
@@ -87,6 +89,30 @@ The iOS version is currently very limited. You can use:
 * lineWidth
 * lineType
 * startAt
+
+## Canvas
+
+You can also create a canvas view that currently allows you to draw sliced circles:
+
+```js
+const circleView = lines.createCanvas({
+	width: 200,
+	height: 200,
+	startRotation: 45,
+	direction: "cw", // ccw
+	circleColors: ["#cecece", "#ff0", "#f0f", "#f00"],
+})
+win.add(circleView);
+```
+
+### Properties
+* startRotation
+* direction: "cw" / "ccw"
+* circleColors: Array of colors
+
+### Methods
+* drawCircle(same properties)
+
 
 ## License
 

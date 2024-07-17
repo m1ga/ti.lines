@@ -22,6 +22,8 @@ public class CanvasView extends TiUIView {
     //    private int circleBorderWidth = 0;
     public String[] circleColors;
     public int startRotation = 0;
+    public float borderWidth = 0;
+    public float originalRadius = 0;
     public boolean directionCw = true;
     PaintView tiPaintView;
     RectF oval = new RectF(0f, 0f, 100f, 100f);
@@ -34,7 +36,8 @@ public class CanvasView extends TiUIView {
         originalViewWidth = dimensionWidth.getAsPixels(getOuterView());
         dimensionHeight = new TiDimension(TiConvert.toString(proxy.getHeight()), TiDimension.TYPE_HEIGHT);
         originalViewHeight = dimensionHeight.getAsPixels(getOuterView());
-        oval = new RectF(0f, 0f, originalViewWidth, dimensionHeight.getAsPixels(tiPaintView));
+        originalRadius = (float) (dimensionHeight.getAsPixels(getOuterView()) * 0.5);
+        oval = new RectF(0f, 0f, originalViewWidth, dimensionHeight.getAsPixels(tiPaintView) + borderWidth);
         setNativeView(tiPaintView);
     }
 
@@ -65,7 +68,6 @@ public class CanvasView extends TiUIView {
         @Override
         protected void onDraw(Canvas canvas) {
             int slices = circleColors.length;
-
             if (slices > 0) {
                 circlePaint.setStyle(Paint.Style.FILL);
 
@@ -80,6 +82,24 @@ public class CanvasView extends TiUIView {
                     canvas.drawArc(oval, val * circleAngle * i + startRotation, circleAngle, true, circlePaint);
                 }
 
+                if (proxy.hasPropertyAndNotNull("circleBorderColor")) {
+                    oval.set(
+                            (float) originalViewWidth / 2 - originalRadius + (borderWidth * 0.5f),
+                            (float) originalViewHeight / 2 - originalRadius + (borderWidth * 0.5f),
+                            (float) originalViewWidth / 2 + originalRadius - (borderWidth * 0.5f),
+                            (float) originalViewHeight / 2 + originalRadius - (borderWidth * 0.5f)
+                    );
+
+                    circlePaint.setStyle(Paint.Style.STROKE);
+                    circlePaint.setColor(TiConvert.toColor((String) proxy.getProperty("circleBorderColor"), TiApplication.getAppCurrentActivity()));
+                    circlePaint.setStrokeWidth(borderWidth);
+
+                    circleAngle = (float) 360 / slices;
+
+                    for (int i = 0; i < slices; ++i) {
+                        canvas.drawArc(oval, circleAngle * i + startRotation, circleAngle, true, circlePaint);
+                    }
+                }
             }
         }
 
