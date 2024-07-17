@@ -11,6 +11,8 @@ import org.appcelerator.titanium.view.TiUIView;
 public class CanvasProxy extends TiViewProxy {
     CanvasView view;
     private String[] circleColors;
+    private int startRotation = 0;
+    private boolean directionCw = true;
 
     public CanvasProxy() {
         super();
@@ -25,6 +27,8 @@ public class CanvasProxy extends TiViewProxy {
 
     private void updateView() {
         view.circleColors = circleColors;
+        view.startRotation = startRotation;
+        view.directionCw = directionCw;
         view.redraw();
     }
 
@@ -33,6 +37,12 @@ public class CanvasProxy extends TiViewProxy {
         super.handleCreationDict(options);
         if (options.containsKeyAndNotNull("circleColors")) {
             circleColors = options.getStringArray("circleColors");
+        }
+        if (options.containsKeyAndNotNull("startRotation")) {
+            startRotation = options.getInt("startRotation");
+        }
+        if (options.containsKeyAndNotNull("direction")) {
+            directionCw = options.getString("direction").equals("cw");
         }
     }
 

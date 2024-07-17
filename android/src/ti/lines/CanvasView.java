@@ -15,15 +15,17 @@ import org.appcelerator.titanium.view.TiUIView;
 
 public class CanvasView extends TiUIView {
 
-//    private int circleBorderWidth = 0;
-    public String[] circleColors;
-    PaintView tiPaintView;
-    RectF oval = new RectF(0f, 0f, 100f,100f);
-    Boolean drawCircle = false;
-    private int originalViewHeight;
-    private TiDimension dimensionHeight;
-    private int originalViewWidth;
     private final Paint circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final int originalViewHeight;
+    private final TiDimension dimensionHeight;
+    private final int originalViewWidth;
+    //    private int circleBorderWidth = 0;
+    public String[] circleColors;
+    public int startRotation = 0;
+    public boolean directionCw = true;
+    PaintView tiPaintView;
+    RectF oval = new RectF(0f, 0f, 100f, 100f);
+    Boolean drawCircle = false;
 
     public CanvasView(TiViewProxy proxy) {
         super(proxy);
@@ -32,12 +34,25 @@ public class CanvasView extends TiUIView {
         originalViewWidth = dimensionWidth.getAsPixels(getOuterView());
         dimensionHeight = new TiDimension(TiConvert.toString(proxy.getHeight()), TiDimension.TYPE_HEIGHT);
         originalViewHeight = dimensionHeight.getAsPixels(getOuterView());
-        oval = new RectF(0f, 0f, originalViewWidth,dimensionHeight.getAsPixels(tiPaintView));
+        oval = new RectF(0f, 0f, originalViewWidth, dimensionHeight.getAsPixels(tiPaintView));
         setNativeView(tiPaintView);
     }
 
     public void redraw() {
         tiPaintView.invalidate();
+    }
+
+    public void drawCircle(KrollDict kd) {
+        if (kd.containsKeyAndNotNull("circleColors")) {
+            circleColors = kd.getStringArray("circleColors");
+        }
+        if (kd.containsKeyAndNotNull("startRotation")) {
+            startRotation = kd.getInt("startRotation");
+        }
+        if (kd.containsKeyAndNotNull("direction")) {
+            directionCw = kd.getString("direction").equals("cw");
+        }
+        redraw();
     }
 
     public class PaintView extends View {
@@ -55,12 +70,16 @@ public class CanvasView extends TiUIView {
                 circlePaint.setStyle(Paint.Style.FILL);
 
                 circlePaint.setColor(TiConvert.toColor(circleColors[0], TiApplication.getAppCurrentActivity()));
-                float circleAngle = (float) 360 /slices;
-
-                for (int i=0; i<slices;++i) {
-                    circlePaint.setColor(TiConvert.toColor(circleColors[i], TiApplication.getAppCurrentActivity()));
-                    canvas.drawArc(oval, circleAngle*i, circleAngle, true, circlePaint);
+                float circleAngle = (float) 360 / slices;
+                int val = 1;
+                if (directionCw) {
+                    val = -1;
                 }
+                for (int i = 0; i < slices; ++i) {
+                    circlePaint.setColor(TiConvert.toColor(circleColors[i], TiApplication.getAppCurrentActivity()));
+                    canvas.drawArc(oval, val * circleAngle * i + startRotation, circleAngle, true, circlePaint);
+                }
+
             }
         }
 
@@ -68,13 +87,6 @@ public class CanvasView extends TiUIView {
         public void clear() {
             clearAll = true;
             invalidate();
-        }
-    }
-
-    public void drawCircle(KrollDict kd) {
-        if (kd.containsKeyAndNotNull("circleColors")) {
-            circleColors = kd.getStringArray("circleColors");
-            redraw();
         }
     }
 }
