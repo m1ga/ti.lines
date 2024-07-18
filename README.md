@@ -94,6 +94,8 @@ The iOS version is currently very limited. You can use:
 
 ## Canvas
 
+<img src="screenshot_circle.png" alt="circle"/>
+
 You can also create a canvas view that currently allows you to draw sliced circles:
 
 ```js
