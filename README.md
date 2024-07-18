@@ -1,4 +1,4 @@
-# ti.lines - Draw simple lines, graphs and slicced circle in Titanium Mobile
+# ti.lines - Draw simple lines, graphs and slicced circle in Titanium SDK
 
 <img src="screenshot.png" alt="screenshot"/>
 
