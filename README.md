@@ -79,6 +79,8 @@ If you change properties after the view is visible you will need to call `redraw
 * **START_BOTTOM**: start at the bottom
 * **STROKE_NORMAL**: normal line
 * **STROKE_DASHED**: dashed line
+* **DIRECTION_CW**: circle direction clock wise
+* **DIRECTION_CCW**: circle direction counter clock wise
 
 ### iOS version
 
@@ -99,7 +101,7 @@ const circleView = lines.createCanvas({
 	width: 200,
 	height: 200,
 	startRotation: 45,
-	direction: "cw", // ccw
+	direction: lines.DIRECTION_CCW,
 	circleColors: ["#cecece", "#ff0", "#f0f", "#f00"],
 })
 win.add(circleView);
@@ -107,7 +109,7 @@ win.add(circleView);
 
 ### Properties
 * startRotation
-* direction: "cw" / "ccw"
+* direction: DIRECTION_CW,  DIRECTION_CCW
 * circleColors: Array of colors
 
 ### Methods

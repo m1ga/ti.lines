@@ -19,15 +19,13 @@ public class CanvasView extends TiUIView {
     private final int originalViewHeight;
     private final TiDimension dimensionHeight;
     private final int originalViewWidth;
-    //    private int circleBorderWidth = 0;
     public String[] circleColors;
-    public int startRotation = 0;
+    public int startRotation = -90;
     public float borderWidth = 0;
     public float originalRadius = 0;
     public boolean directionCw = true;
     PaintView tiPaintView;
     RectF oval = new RectF(0f, 0f, 100f, 100f);
-    Boolean drawCircle = false;
 
     public CanvasView(TiViewProxy proxy) {
         super(proxy);
@@ -50,10 +48,10 @@ public class CanvasView extends TiUIView {
             circleColors = kd.getStringArray("circleColors");
         }
         if (kd.containsKeyAndNotNull("startRotation")) {
-            startRotation = kd.getInt("startRotation");
+            startRotation = kd.getInt("startRotation") - 90;
         }
         if (kd.containsKeyAndNotNull("direction")) {
-            directionCw = kd.getString("direction").equals("cw");
+            directionCw = (kd.getInt("direction") == TiLinesModule.DIRECTION_CW);
         }
         redraw();
     }
@@ -73,10 +71,13 @@ public class CanvasView extends TiUIView {
 
                 circlePaint.setColor(TiConvert.toColor(circleColors[0], TiApplication.getAppCurrentActivity()));
                 float circleAngle = (float) 360 / slices;
-                int val = 1;
+                int val = -1;
                 if (directionCw) {
-                    val = -1;
+                    val = 1;
+                } else {
+                    startRotation -= circleAngle;
                 }
+
                 for (int i = 0; i < slices; ++i) {
                     circlePaint.setColor(TiConvert.toColor(circleColors[i], TiApplication.getAppCurrentActivity()));
                     canvas.drawArc(oval, val * circleAngle * i + startRotation, circleAngle, true, circlePaint);

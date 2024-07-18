@@ -6,14 +6,13 @@ import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.annotations.Kroll;
 import org.appcelerator.titanium.TiDimension;
 import org.appcelerator.titanium.proxy.TiViewProxy;
-import org.appcelerator.titanium.util.TiConvert;
 import org.appcelerator.titanium.view.TiUIView;
 
 @Kroll.proxy(creatableInModule = TiLinesModule.class)
 public class CanvasProxy extends TiViewProxy {
     CanvasView view;
     private String[] circleColors;
-    private int startRotation = 0;
+    private int startRotation = -90;
     private boolean directionCw = true;
     private float borderWidth = 1;
 
@@ -32,7 +31,7 @@ public class CanvasProxy extends TiViewProxy {
         view.circleColors = circleColors;
         view.startRotation = startRotation;
         view.directionCw = directionCw;
-        view.borderWidth = new TiDimension(borderWidth, TiDimension.TYPE_WIDTH).getAsPixels(view.tiPaintView);;
+        view.borderWidth = new TiDimension(borderWidth, TiDimension.TYPE_WIDTH).getAsPixels(view.tiPaintView);
         view.redraw();
     }
 
@@ -43,10 +42,10 @@ public class CanvasProxy extends TiViewProxy {
             circleColors = options.getStringArray("circleColors");
         }
         if (options.containsKeyAndNotNull("startRotation")) {
-            startRotation = options.getInt("startRotation");
+            startRotation = options.getInt("startRotation") - 90;
         }
         if (options.containsKeyAndNotNull("direction")) {
-            directionCw = options.getString("direction").equals("cw");
+            directionCw = (options.getInt("direction") == TiLinesModule.DIRECTION_CW);
         }
         if (options.containsKeyAndNotNull("circleBorderWidth")) {
             borderWidth = options.getInt("circleBorderWidth");
