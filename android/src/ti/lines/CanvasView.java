@@ -44,6 +44,7 @@ public class CanvasView extends TiUIView {
     }
 
     public void drawCircle(KrollDict kd) {
+        startRotation = -90;
         if (kd.containsKeyAndNotNull("circleColors")) {
             circleColors = kd.getStringArray("circleColors");
         }

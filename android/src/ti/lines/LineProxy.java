@@ -185,7 +185,7 @@ public class LineProxy extends TiViewProxy {
                 yAxisTextOffestX = TiConvert.toInt(innerOptions.get("offsetX"), 0);
             }
             if (innerOptions.containsKey("color")) {
-                yAxisTextColor = TiConvert.toColor(innerOptions.getString("color"));
+                yAxisTextColor = TiConvert.toColor(innerOptions.getString("color"), TiApplication.getAppCurrentActivity());
             }
         }
 
